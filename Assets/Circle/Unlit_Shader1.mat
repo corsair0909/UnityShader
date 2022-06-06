@@ -22,7 +22,7 @@ Material:
     m_Floats:
     - _Radius: 0.565
     - _Slider: 0.565
-    - _Smooth: 0.16
+    - _Smooth: 0.027
     - _TillCount: 4
     m_Colors:
     - _Ancohr: {r: 0, g: 0, b: 0.5, a: 0.5}

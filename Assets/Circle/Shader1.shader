@@ -93,7 +93,7 @@ Shader "Unlit/Shader1"
                 float halfLinewidth = LineWidth/2;
 
                 float edge = (soft) ? _Smooth * _Radius : 0.0f;
-                return smoothstep((radius - halfLinewidth)-edge,(radius - halfLinewidth)+edge,pl) ;
+                return smoothstep((radius - halfLinewidth)-edge,(radius - halfLinewidth)+edge,pl)
                  - smoothstep((radius+halfLinewidth)-edge,(radius + halfLinewidth)+edge,pl);
             }
 
