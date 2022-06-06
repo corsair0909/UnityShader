@@ -3,19 +3,16 @@ Shader "Unlit/Line"
     Properties
     {
         _MainTex ("Texture", 2D) = "white" {}
+        _Color("Color",color) = (1,1,1,1)
+        _LineWidth("Width",Range(0,1)) = 0.1
     }
     SubShader
     {
-        Tags { "RenderType"="Opaque" }
-        LOD 100
-
         Pass
         {
             CGPROGRAM
             #pragma vertex vert
             #pragma fragment frag
-            // make fog work
-            #pragma multi_compile_fog
 
             #include "UnityCG.cginc"
 
@@ -27,30 +24,35 @@ Shader "Unlit/Line"
 
             struct v2f
             {
-                float2 uv : TEXCOORD0;
-                UNITY_FOG_COORDS(1)
+                float4 screenPos : TEXCOORD0;
                 float4 vertex : SV_POSITION;
+                float2 uv : TEXCOORD1; 
             };
 
             sampler2D _MainTex;
-            float4 _MainTex_ST;
+            fixed4 _Color;
+            fixed _LineWidth;
 
+            float Line(float a,float b,float Line_Width,float Edge_tickness)
+            {
+                float half_line_width = Line_Width * 0.5f;
+                return smoothstep(a-half_line_width-Edge_tickness,a-half_line_width,b)
+                - smoothstep(a+half_line_width,a+half_line_width+Edge_tickness,b);
+            }
             v2f vert (appdata v)
             {
                 v2f o;
                 o.vertex = UnityObjectToClipPos(v.vertex);
-                o.uv = TRANSFORM_TEX(v.uv, _MainTex);
-                UNITY_TRANSFER_FOG(o,o.vertex);
+                o.screenPos = ComputeScreenPos(o.vertex);
+                o.uv = v.uv;
                 return o;
             }
 
             fixed4 frag (v2f i) : SV_Target
             {
-                // sample the texture
-                fixed4 col = tex2D(_MainTex, i.uv);
-                // apply fog
-                UNITY_APPLY_FOG(i.fogCoord, col);
-                return col;
+                float2 uv = i.screenPos.xy/i.screenPos.w;
+                fixed3 color = lerp(fixed3(0,0,0),_Color,Line(i.uv.x,i.uv.y,_LineWidth,_LineWidth*0.1f));
+                return fixed4(color,1);
             }
             ENDCG
         }
