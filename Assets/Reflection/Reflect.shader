@@ -6,7 +6,7 @@ Shader "Unlit/Reflect"
         _Tint("Color",color) = (1,1,1,1)
         _SkyBox("SkyBox", Cube) = "white" {}
         _ReflectAmount("Amount",Range(0,1)) = 0
-        
+        _FresnelAmount("Fresnel",Range(0,1)) = 0
         }
     SubShader
     {
@@ -26,6 +26,7 @@ Shader "Unlit/Reflect"
             samplerCUBE _SkyBox;
             fixed _ReflectAmount;
             fixed4 _Tint;
+            fixed _FresnelAmount;
 
             struct appdata
             {
@@ -64,6 +65,7 @@ Shader "Unlit/Reflect"
             {
                 float3 nDirWS = normalize(i.NDir);
                 float3 lDirWS = normalize(_WorldSpaceLightPos0 - i.WorldPos);
+                float3 vDirWS = normalize(i.VDir);
 
                 float4 var_MainTex = tex2D(_MainTex,i.uv) ;
 
@@ -74,8 +76,10 @@ Shader "Unlit/Reflect"
 
                 //float3 var_SkyBox = texCUBE(_SkyBox,i.VRDir).rgb;
                 float3 var_SkyBox = UNITY_SAMPLE_TEXCUBE(unity_SpecCube0,i.VRDir);// 内置天空盒变量
+                //菲涅尔项计算公式 F(v,n) = F0 + (1-F0)(1-dot(v,n))^5
+                float fresnal = _FresnelAmount + (1-_FresnelAmount)*pow(1-dot(vDirWS,nDirWS),5);
                 
-                return fixed4((ambient + lerp(diffuse,var_SkyBox,_ReflectAmount)),1);
+                return fixed4((ambient + lerp(diffuse,var_SkyBox,saturate(fresnal))),1);
             }
             ENDCG
         }
