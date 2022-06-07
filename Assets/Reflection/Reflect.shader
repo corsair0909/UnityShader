@@ -2,8 +2,11 @@ Shader "Unlit/Reflect"
 {
     Properties
     {
+        _MainTex("MainTex",2D) = "white"{}
         _SkyBox("SkyBox", Cube) = "white" {}
-    }
+        _ReflectAmount("Amount",Range(0,1)) = 0
+        
+        }
     SubShader
     {
         Tags { "RenderType"="Opaque" }
@@ -14,12 +17,17 @@ Shader "Unlit/Reflect"
             CGPROGRAM
             #pragma vertex vert
             #pragma fragment frag
-            #include "UnityCG.cginc"
+            #include "Lighting.cginc"
+            #include  "AutoLight.cginc"
 
+            sampler2D _MainTex;
+            float4 _MainTex_ST;
             samplerCUBE _SkyBox;
+            fixed _ReflectAmount;
 
             struct appdata
             {
+                float2 uv : TEXCOORD0;
                 float4 vertex : POSITION;
                 float3 normal : NORMAL;
             };
@@ -30,6 +38,8 @@ Shader "Unlit/Reflect"
                 float3 NDir : TEXCOORD1;
                 float4 WorldPos : TEXCOORD2;
                 float3 VRDir : TEXCOORD3;
+                float2 uv : TEXCOORD4;
+                float3 VDir : TEXCOORD5;
             };
             
 
@@ -37,16 +47,35 @@ Shader "Unlit/Reflect"
             {
                 v2f o;
                 o.vertex = UnityObjectToClipPos(v.vertex);
+
+                o.uv = TRANSFORM_TEX(v.uv,_MainTex);
+                
                 o.NDir = UnityObjectToWorldNormal(v.normal);
                 o.WorldPos = mul(unity_ObjectToWorld,v.vertex);
-                float3 VDir = UnityObjectToViewPos(o.WorldPos).xyz;
-                o.VRDir = reflect(-VDir,o.NDir);
+                o.VDir = UnityObjectToViewPos(o.WorldPos).xyz;
+                o.VRDir = reflect(-o.VDir,o.NDir);
+                
                 return o;
             }
 
             fixed4 frag (v2f i) : SV_Target
             {
-                return texCUBE(_SkyBox,i.VRDir);
+                float3 nDirWS = normalize(i.NDir);
+                float3 vDirWS = normalize(i.VDir);
+                float3 lDirWS = normalize(_WorldSpaceLightPos0 - i.WorldPos);
+
+                float4 var_MainTex = tex2D(_MainTex,i.uv);
+
+                float3 ambient = UNITY_LIGHTMODEL_AMBIENT.rgb;
+
+                float ndotl = saturate(dot(nDirWS,lDirWS));
+                float3 diffuse = _LightColor0.rgb * ndotl * var_MainTex.rgb ;
+
+                float3 var_SkyBox = texCUBE(_SkyBox,i.VRDir).rgb;
+
+                
+                
+                return fixed4((ambient + lerp(diffuse,var_SkyBox,_ReflectAmount)),1);
             }
             ENDCG
         }
