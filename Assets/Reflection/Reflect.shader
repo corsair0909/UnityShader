@@ -74,12 +74,14 @@ Shader "Unlit/Reflect"
                 float ndotl = saturate(dot(nDirWS,lDirWS)) * 0.5f + 0.5;
                 float3 diffuse = _LightColor0.rgb * ndotl * var_MainTex.rgb * _Tint;
 
+                UNITY_LIGHT_ATTENUATION(atten,i,i.WorldPos);
+
                 //float3 var_SkyBox = texCUBE(_SkyBox,i.VRDir).rgb;
                 float3 var_SkyBox = UNITY_SAMPLE_TEXCUBE(unity_SpecCube0,i.VRDir);// 内置天空盒变量
                 //菲涅尔项计算公式 F(v,n) = F0 + (1-F0)(1-dot(v,n))^5
                 float fresnal = _FresnelAmount + (1-_FresnelAmount)*pow(1-dot(vDirWS,nDirWS),5);
                 
-                return fixed4((ambient + lerp(diffuse,var_SkyBox,saturate(fresnal))),1);
+                return fixed4((ambient + lerp(diffuse,var_SkyBox,saturate(fresnal))),1)*atten;
             }
             ENDCG
         }
