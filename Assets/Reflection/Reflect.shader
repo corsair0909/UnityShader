@@ -3,6 +3,7 @@ Shader "Unlit/Reflect"
     Properties
     {
         _MainTex("MainTex",2D) = "white"{}
+        _Tint("Color",color) = (1,1,1,1)
         _SkyBox("SkyBox", Cube) = "white" {}
         _ReflectAmount("Amount",Range(0,1)) = 0
         
@@ -24,6 +25,7 @@ Shader "Unlit/Reflect"
             float4 _MainTex_ST;
             samplerCUBE _SkyBox;
             fixed _ReflectAmount;
+            fixed4 _Tint;
 
             struct appdata
             {
@@ -61,19 +63,17 @@ Shader "Unlit/Reflect"
             fixed4 frag (v2f i) : SV_Target
             {
                 float3 nDirWS = normalize(i.NDir);
-                float3 vDirWS = normalize(i.VDir);
                 float3 lDirWS = normalize(_WorldSpaceLightPos0 - i.WorldPos);
 
-                float4 var_MainTex = tex2D(_MainTex,i.uv);
+                float4 var_MainTex = tex2D(_MainTex,i.uv) ;
 
                 float3 ambient = UNITY_LIGHTMODEL_AMBIENT.rgb;
 
-                float ndotl = saturate(dot(nDirWS,lDirWS));
-                float3 diffuse = _LightColor0.rgb * ndotl * var_MainTex.rgb ;
+                float ndotl = saturate(dot(nDirWS,lDirWS)) * 0.5f + 0.5;
+                float3 diffuse = _LightColor0.rgb * ndotl * var_MainTex.rgb * _Tint;
 
-                float3 var_SkyBox = texCUBE(_SkyBox,i.VRDir).rgb;
-
-                
+                //float3 var_SkyBox = texCUBE(_SkyBox,i.VRDir).rgb;
+                float3 var_SkyBox = UNITY_SAMPLE_TEXCUBE(unity_SpecCube0,i.VRDir);// 内置天空盒变量
                 
                 return fixed4((ambient + lerp(diffuse,var_SkyBox,_ReflectAmount)),1);
             }
