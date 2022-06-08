@@ -20,6 +20,6 @@ Material:
     serializedVersion: 3
     m_TexEnvs: []
     m_Floats:
-    - _Radius: 0.5
+    - _Radius: 1
     m_Colors: []
   m_BuildTextureStacks: []

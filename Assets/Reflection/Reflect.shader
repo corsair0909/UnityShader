@@ -70,6 +70,7 @@ Shader "Unlit/Reflect"
                 float4 var_MainTex = tex2D(_MainTex,i.uv) ;
 
                 float3 ambient = UNITY_LIGHTMODEL_AMBIENT.rgb;
+                //float3 ambient = ShadeSH9(half4(nDirWS,1));
 
                 float ndotl = saturate(dot(nDirWS,lDirWS)) * 0.5f + 0.5;
                 float3 diffuse = _LightColor0.rgb * ndotl * var_MainTex.rgb * _Tint;
