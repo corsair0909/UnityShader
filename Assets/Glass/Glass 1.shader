@@ -4,15 +4,14 @@ Shader "Unlit/Glass"
     {
         _Color("Color",Color) = (0,0,0,0)
         _Skybox("Skybox",Cube) = "white"{}
-        _Fresnel("FresnelPow",range(0,1))=0
-        _eta("RefractEta",range(0,1)) = 0
-        _FresnelScale ("Scale", Range(0, 10)) = .5
-        _FresnelBias ("Bias", Range(0, 10)) = .5
-        
+        _Tint("扭曲强度",range(0,1)) = 0
+        _BumpMap("法线贴图",2D) = "white"{}
+        _ReflectAmount("平衡值",range(0,1)) = 0
     }
     SubShader
     {
-
+        Tags{"RenderType" = "Opaque" "Queue" = "Transparent"}
+        Grabpass{"_ReflectionTex"}
         Pass
         {
             CGPROGRAM
@@ -22,23 +21,32 @@ Shader "Unlit/Glass"
             #include "UnityCG.cginc"
 
             fixed4 _Color;
-            fixed _Fresnel;
+            fixed _Tint;
             samplerCUBE _Skybox;
+            sampler2D _BumpMap;
+            fixed _ReflectAmount;
+            sampler2D _ReflectionTex;
+            fixed _FresnelAmount;
             fixed _eta;
-            fixed _FresnelScale;
-            fixed _FresnelBias;
+            fixed _FresnelBais;
 
             struct appdata
             {
-                float4 vertex : POSITION;
-                float3 Normal : NORMAL;
+                float2 uv       : TEXCOORD0;
+                float4 vertex   : POSITION;
+                float3 Normal   : NORMAL;
+                float4 Tangent  : TANGENT;
             };
 
             struct v2f
             {
-                float4 vertex : SV_POSITION;
-                float3 worldView : TEXCOORD0;
-                float3 worldNormal : TEXCOORD1;
+                float4 vertex           : SV_POSITION;
+                float3 worldView        : TEXCOORD0;
+                float3 worldNormal      : TEXCOORD1;
+                float3 worldTangent     : TEXCOORD2;
+                float3 WworldBTangent   : TEXCOORD3;
+                float2 uv               : TEXCOORD4;
+                float4 scrPos           : TEXCOORD5;
             };
             
 
@@ -46,34 +54,28 @@ Shader "Unlit/Glass"
             {
                 v2f o;
                 o.vertex = UnityObjectToClipPos(v.vertex);
-                o.worldView = mul(unity_ObjectToWorld,v.vertex).xyz - _WorldSpaceCameraPos;
+                o.worldView = _WorldSpaceCameraPos - mul(unity_ObjectToWorld,v.vertex).xyz;
                 o.worldNormal = normalize(UnityObjectToWorldNormal(v.Normal));
+                o.worldTangent =normalize(mul(unity_ObjectToWorld,float4(v.Tangent.xyz,1)));
+                o.WworldBTangent =normalize(cross(o.worldNormal,o.worldTangent.xyz));
+                o.uv = v.uv;
+                o.scrPos = ComputeScreenPos(v.vertex);
                 return o;
-            }
-
-            fixed Fresnel(float3 V,float3 N,float F0)
-            {
-                float fresnel = max(0, min(1, _FresnelBias * pow(1.0 - dot(V, N), F0)));
-                //float fresnel = F0 + (1.0f-F0)*pow(1-dot(V,N),F0);
-                //float fresnel = pow(1-max(0,dot(V,N)),F0);
-                return fresnel;
             }
 
             fixed4 frag (v2f i) : SV_Target
             {
+                float3 NdirTS = UnpackNormal(tex2D(_BumpMap,i.uv));
+                float3x3 TBN = float3x3(i.worldTangent,i.WworldBTangent,i.worldNormal);
+                float3 NdirWS = mul(TBN,NdirTS);
+                float offset = NdirTS * _Tint;//TS空间下的法线进行扭曲
+                i.scrPos.xy += offset;
+                float4 ReflectionCol = tex2D(_ReflectionTex,i.scrPos.xy/i.scrPos.w);
+                float3 reflectDir = reflect(i.worldView,NdirWS);
+                float4 CubeCol1 = texCUBE(_Skybox,reflectDir);
                 
-                float3 reflectDir = reflect(i.worldView,i.worldNormal);
-                float3 refractDir = refract(i.worldView,i.worldNormal,_eta);
-
-                float4 reflectCol = texCUBE(_Skybox,reflectDir);
-                float4 refractCol = texCUBE(_Skybox,refractDir);
-
-                float fresnel = Fresnel(i.worldView,i.worldNormal,_Fresnel);
-
-                float4 Col = lerp(refractCol,reflectCol,fresnel);
-                Col.rgb *= _Color.rgb;
-                Col.a = _Color.a;
-                return Col;
+                float3 col = lerp(ReflectionCol,CubeCol1,_ReflectAmount);
+                return float4(col,1);
             }
             ENDCG
         }

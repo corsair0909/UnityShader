@@ -20,12 +20,14 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _Skybox:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 8900000, guid: 8a293ce833d584fc98516e0e74f495a4, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
-    - _Fresnel: 0
-    - _eta: 0
+    - _Fresnel: 0.204
+    - _FresnelBias: 0.09
+    - _FresnelScale: 5.34
+    - _eta: 0.359
     m_Colors:
-    - _Color: {r: 0, g: 0, b: 0, a: 0}
+    - _Color: {r: 1, g: 1, b: 1, a: 0}
   m_BuildTextureStacks: []
