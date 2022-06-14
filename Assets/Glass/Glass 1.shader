@@ -75,6 +75,7 @@ Shader "Unlit/Glass"
                 float4 CubeCol1 = texCUBE(_Skybox,reflectDir);
                 
                 float3 col = lerp(ReflectionCol,CubeCol1,_ReflectAmount);
+                col.rgb *=_Color.rgb;
                 return float4(col,1);
             }
             ENDCG
