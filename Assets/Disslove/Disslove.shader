@@ -85,7 +85,7 @@ Shader "Unlit/Disslove"
             fixed4 frag (v2f i) : SV_Target
             {
                 //float4 Linecol = DefaultDisslove(i);
-                CenterDisslove(i);
+                DirDisslove(i);
                 float4 Col = tex2D(_MainTex,i.uv);
                 return Col;
             }

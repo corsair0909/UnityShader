@@ -20,7 +20,7 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: da959017bfc534a25a8e8a01194d7453, type: 3}
+        m_Texture: {fileID: 2800000, guid: e5ab23072197344e5b39552c1c861eb8, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _NoiseTex:
@@ -29,7 +29,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Floats:
     - _DissloveScale: 0.53
-    - _EdgeWidth: 0.192
+    - _EdgeWidth: 0.21
     - _Thrshold: 0
     m_Colors:
     - _DissloveDir: {r: 1, g: 1, b: 0, a: 0}
