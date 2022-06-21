@@ -11,11 +11,12 @@ Shader "Unlit/GeometryShader"
 
         Pass
         {
+            
             CGPROGRAM
+            #pragma target 4.0
             #pragma vertex vert
             #pragma fragment frag
-            // make fog work
-            #pragma multi_compile_fog
+            #pragma geometry gemo
 
             #include "UnityCG.cginc"
 
@@ -25,31 +26,44 @@ Shader "Unlit/GeometryShader"
                 float2 uv : TEXCOORD0;
             };
 
-            struct v2f
+            struct v2g
+            {
+                float4 vertex : SV_POSITION;
+                float2 uv : TEXCOORD;
+            };
+
+            struct g2f
             {
                 float2 uv : TEXCOORD0;
-                UNITY_FOG_COORDS(1)
                 float4 vertex : SV_POSITION;
             };
 
             sampler2D _MainTex;
             float4 _MainTex_ST;
 
-            v2f vert (appdata v)
+            v2g vert (appdata v)
             {
-                v2f o;
+                v2g o;
                 o.vertex = UnityObjectToClipPos(v.vertex);
-                o.uv = TRANSFORM_TEX(v.uv, _MainTex);
-                UNITY_TRANSFER_FOG(o,o.vertex);
                 return o;
             }
-
-            fixed4 frag (v2f i) : SV_Target
+            //mac电脑GPU不支持几何着色器
+            [maxvertexcount(3)]
+            void gemo (triangle appdata input[3],inout TriangleStream<g2f> outStream)
             {
-                // sample the texture
-                fixed4 col = tex2D(_MainTex, i.uv);
-                // apply fog
-                UNITY_APPLY_FOG(i.fogCoord, col);
+                
+                for (int i = 0; i < 3; ++i)
+                {
+                    g2f o;
+                    o.uv = input[i].uv;
+                    o.vertex = input[i].vertex;
+                    outStream.Append(o);
+                }
+            }
+
+            fixed4 frag (g2f i) : SV_Target
+            {
+                fixed4 col = tex2D(_MainTex,i.uv);
                 return col;
             }
             ENDCG
