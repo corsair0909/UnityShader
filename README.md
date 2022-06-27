@@ -29,3 +29,13 @@ Clip函数剔除小于阈值的像素.
 首先需要设置锚点并计算世界空间下顶点位置到锚点的向量。求出该向量在指定的消融方向上的投影，并将其应用在disslove值的计算上.    
 ### 参考链接。   
 [定向消融、向心消融](https://zhuanlan.zhihu.com/p/321338977)
+
+## [序列帧动画](https://github.com/corsair0909/-0-Shader/tree/main/Assets/SequeneAnim).    
+![QQ20220620-113559-HD](https://user-images.githubusercontent.com/49482455/175051202-3204b1b9-6315-4a6b-ad54-61636e3b4543.gif).     
+### 实现
+#### 行列数计算
+行数 = time/HorizontalCount。  
+列数 = time - 行数 * HorizontalCount    
+#### 缩放UV    
+序列帧图片包含多张关键帧，需要把采样坐标映射到每个关键帧图像范围内。（可以理解为只显示一张关键帧的大小）     
+注意：序列帧的播放顺序为从上到下，而uv竖直方向的顺序为从下到上，因此竖直方向上为减去偏移量。    
