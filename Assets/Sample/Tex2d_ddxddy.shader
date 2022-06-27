@@ -46,8 +46,8 @@ Shader "Unlit/Tex2d"
 
             fixed4 frag (v2f i) : SV_Target
             {
-                // sample the texture
-                fixed4 col = tex2D(_MainTex, i.uv);
+                // 偏导函数采样，像素之间的差值大于给定值的像素才会取出其颜色
+                fixed4 col = tex2D(_MainTex, i.uv,0.02f,0.02f);
                 // apply fog
                 UNITY_APPLY_FOG(i.fogCoord, col);
                 return col;

@@ -1,4 +1,4 @@
-Shader "Unlit/Tex2d_LOD"
+Shader "Unlit/Tex2d_bias"
 {
     Properties
     {
@@ -22,12 +22,12 @@ Shader "Unlit/Tex2d_LOD"
             struct appdata
             {
                 float4 vertex : POSITION;
-                float4 uv : TEXCOORD0;
+                float2 uv : TEXCOORD0;
             };
 
             struct v2f
             {
-                float4 uv : TEXCOORD0;
+                float2 uv : TEXCOORD0;
                 UNITY_FOG_COORDS(1)
                 float4 vertex : SV_POSITION;
                 float4 screenPos : TEXCOORD1;
@@ -52,11 +52,8 @@ Shader "Unlit/Tex2d_LOD"
 
             fixed4 frag (v2f i) : SV_Target
             {
-                fixed dx = ddx(i.uv.x);
-                fixed dy = ddy(i.uv.y);
-                fixed lod = max(dot(dx,dx),dot(dy,dy));
-                i.uv.w = lod;
-                fixed4 col = tex2Dlod(_MainTex, i.uv);
+                //偏移到指定的mipmap层采样
+                fixed4 col = tex2Dbias(_MainTex,float4(i.uv,0,4));
                 // apply fog
                 UNITY_APPLY_FOG(i.fogCoord, col);
                 return col;

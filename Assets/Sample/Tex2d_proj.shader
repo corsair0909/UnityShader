@@ -30,6 +30,7 @@ Shader "Unlit/Tex2d"
                 float2 uv : TEXCOORD0;
                 UNITY_FOG_COORDS(1)
                 float4 vertex : SV_POSITION;
+                float4 screenPos : TEXCOORD1;
             };
 
             sampler2D _MainTex;
@@ -41,13 +42,16 @@ Shader "Unlit/Tex2d"
                 o.vertex = UnityObjectToClipPos(v.vertex);
                 o.uv = TRANSFORM_TEX(v.uv, _MainTex);
                 UNITY_TRANSFER_FOG(o,o.vertex);
+                o.screenPos = ComputeScreenPos(o.vertex);
                 return o;
             }
 
             fixed4 frag (v2f i) : SV_Target
             {
-                // 偏导函数采样，像素之间的差值大于给定值的像素才会取出其颜色
-                fixed4 col = tex2D(_MainTex, i.uv,0.02f,0.02f);
+                // 下两行结果相同，tex2Dproj在采样之前会将输入坐标的xy除以w分量，
+                //需要返回0-1值的时候用tex2Dproj函数，例如深度图采样
+                fixed4 col = tex2Dproj(_MainTex, UNITY_PROJ_COORD(i.screenPos));
+                //fixed4 col = tex2D(_MainTex, i.screenPos.xy/i.screenPos.w);
                 // apply fog
                 UNITY_APPLY_FOG(i.fogCoord, col);
                 return col;

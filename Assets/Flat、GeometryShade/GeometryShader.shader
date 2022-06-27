@@ -47,7 +47,9 @@ Shader "Unlit/GeometryShader"
                 o.vertex = UnityObjectToClipPos(v.vertex);
                 return o;
             }
+            
             //mac电脑GPU不支持几何着色器
+            //正常的传递数据
             [maxvertexcount(3)]
             void gemo (triangle appdata input[3],inout TriangleStream<g2f> outStream)
             {
@@ -59,6 +61,9 @@ Shader "Unlit/GeometryShader"
                     o.vertex = input[i].vertex;
                     outStream.Append(o);
                 }
+                //每输出足够组成指定的图元后
+                //都需要RestartStrip一次再继续组成下一图元
+                outStream.RestartStrip();
             }
 
             fixed4 frag (g2f i) : SV_Target

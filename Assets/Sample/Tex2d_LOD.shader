@@ -1,4 +1,4 @@
-Shader "Unlit/Tex2d"
+Shader "Unlit/Tex2d_LOD"
 {
     Properties
     {
@@ -22,12 +22,12 @@ Shader "Unlit/Tex2d"
             struct appdata
             {
                 float4 vertex : POSITION;
-                float2 uv : TEXCOORD0;
+                float4 uv : TEXCOORD0;
             };
 
             struct v2f
             {
-                float2 uv : TEXCOORD0;
+                float4 uv : TEXCOORD0;
                 UNITY_FOG_COORDS(1)
                 float4 vertex : SV_POSITION;
                 float4 screenPos : TEXCOORD1;
@@ -40,18 +40,24 @@ Shader "Unlit/Tex2d"
             {
                 v2f o;
                 o.vertex = UnityObjectToClipPos(v.vertex);
-                o.uv = TRANSFORM_TEX(v.uv, _MainTex);
+                o.uv = v.uv;
                 UNITY_TRANSFER_FOG(o,o.vertex);
-                o.screenPos = ComputeScreenPos(o.vertex);
                 return o;
+            }
+
+            fixed lod()
+            {
+                
             }
 
             fixed4 frag (v2f i) : SV_Target
             {
-                // 下两行结果相同，tex2Dproj在采样之前会将输入坐标的xy除以w分量，
-                //需要返回0-1值的时候用tex2Dproj函数，例如深度图采样
-                fixed4 col = tex2Dproj(_MainTex, i.screenPos);
-                //fixed4 col = tex2D(_MainTex, i.screenPos.xy/i.screenPos.w);
+                fixed dx = ddx(i.uv.x);
+                fixed dy = ddy(i.uv.y);
+                fixed lod = max(dot(dx,dx),dot(dy,dy));
+                i.uv.w = lod;
+                //查找的是mipmap图
+                fixed4 col = tex2Dlod(_MainTex, i.uv);
                 // apply fog
                 UNITY_APPLY_FOG(i.fogCoord, col);
                 return col;
