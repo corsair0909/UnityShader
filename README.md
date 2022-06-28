@@ -81,4 +81,13 @@ Unity对环境立方体题图（天空盒）积分运算得出模糊的全局光
 
 ### PBR光照结果分解          
 Final = 直接光照结果+间接光照结果。两个光照结果可再分为漫反射结果和镜面反射结果        
+### 参考链接。    
+https://www.cnblogs.com/anesu/p/15786470.html#/c/subject/p/15786470.html    
+https://zhuanlan.zhihu.com/p/407007915    
+https://zhuanlan.zhihu.com/p/57771965    
+https://github.com/csdjk/LearnUnityShader/blob/master/Assets/Scenes/PBR/PBR_Custom/PBR_Custom.shader     
+https://blog.csdn.net/weixin_42825810/article/details/103761869     
+https://learnopengl-cn.github.io/07%20PBR/02%20Lighting/    
+
+https://www.iflyrec.com/views/html/editor.html?id=PWmz2206281739A054F3D500008&audios=127173364     
 
