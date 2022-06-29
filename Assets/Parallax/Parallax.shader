@@ -88,14 +88,15 @@ Shader "Unlit/Parallax"
                 float2 offset = Vdir.xy/(Vdir.z+0.42) * Height * Scale;
                 return offset;
             }
-            fixed2 StepParallax(float3 vdir,fixed scale)
+            fixed2 StepParallax(float2 uv,float3 vdir,fixed scale)
             {
                 fixed numLayer = 20;
                 fixed LayerDepth = 1/numLayer;
                 fixed CurrentLayerDepth = 0.0f;
                 fixed2 CurrentTexcoord  = vdir.xy / vdir.z * scale;
                 fixed2 Step = CurrentTexcoord/numLayer;
-                fixed CurrentMapDepth = tex2D(_Height,CurrentTexcoord).r;
+                float2 currentUV = uv;
+                fixed CurrentMapDepth = tex2D(_Height,currentUV).r;
                 for (int i = 0; i < numLayer; i++)
                 {
                     if (CurrentLayerDepth>CurrentMapDepth)
@@ -103,7 +104,8 @@ Shader "Unlit/Parallax"
                         return CurrentTexcoord;
                     }
                     CurrentTexcoord += Step;
-                    CurrentMapDepth = tex2D(_Height,CurrentTexcoord).r;
+                    //从原本uv进行偏移
+                    CurrentMapDepth = tex2D(_Height,currentUV+CurrentTexcoord).r;
                     CurrentLayerDepth+=LayerDepth;
                 }
                 return CurrentTexcoord;
@@ -135,7 +137,8 @@ Shader "Unlit/Parallax"
                 {
                     fixed MidCoord = (afterCoord+CurrentTexcoord)/2;
                     fixed MidDepth = tex2D(_Height,MidCoord).r;
-                    if (MidDepth<afterDepth)
+                    fixed p0H = length(MidCoord) / LayerUVL;
+                    if (MidDepth<p0H)
                     {
                         CurrentTexcoord = afterCoord;
                     }
@@ -146,7 +149,7 @@ Shader "Unlit/Parallax"
                 }
                 return (afterCoord+CurrentTexcoord)/2;
             }
-
+            
             fixed4 frag (v2f i) : SV_Target
             {
                 //float3x3 TBN = float3x3(i.TdirWS,i.BTdirWS,i.NdirWS);
@@ -155,7 +158,7 @@ Shader "Unlit/Parallax"
                 fixed3 VdirTS = normalize(i.VDirTS);
                 fixed3 HdirTS = normalize(LdirTS+VdirTS);
                 
-                fixed2 offset = ApplyParallax(VdirTS,_ParallaxFactor,i.uv);
+                fixed2 offset = StepParallax(i.uv,VdirTS,_ParallaxFactor);
                 i.uv += offset;
                 // fixed2 offset = StepParallax(VdirTS,_ParallaxFactor);
                 // i.uv += offset;
