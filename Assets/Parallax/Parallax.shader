@@ -128,26 +128,34 @@ Shader "Unlit/Parallax"
                         break;
                     }
                     CurrentTexcoord += Step;
-                    CurrentMapDepth = tex2D(_Height,CurrentTexcoord).r;
+                    CurrentMapDepth = tex2D(_Height,uv+CurrentTexcoord).r;
                     CurrentLayerDepth+=LayerDepth;
                 }
-                fixed2 afterCoord = CurrentTexcoord - Step;
-                fixed afterDepth = tex2D(_Height,afterCoord);
-                for (int i = 0; i < numLayer; ++i)
+
+                //浮雕映射部分
+                float2 T0 = uv-Step, T1 = uv + CurrentTexcoord;
+
+                for (int j = 0;j<20;j++)
                 {
-                    fixed MidCoord = (afterCoord+CurrentTexcoord)/2;
-                    fixed MidDepth = tex2D(_Height,MidCoord).r;
-                    fixed p0H = length(MidCoord) / LayerUVL;
-                    if (MidDepth<p0H)
+                    float2 P0 = (T0 + T1) / 2;
+
+                    float P0Height = tex2D(_Height, P0).r;
+
+                    float P0LayerHeight = length(P0) / LayerUVL;
+
+                    if (P0Height < P0LayerHeight)
                     {
-                        CurrentTexcoord = afterCoord;
+                        T0 = P0;
+
                     }
                     else
                     {
-                        afterCoord = MidCoord;
+                        T1= P0;
                     }
+
                 }
-                return (afterCoord+CurrentTexcoord)/2;
+
+                return (T0 + T1) / 2 - uv;
             }
             
             fixed4 frag (v2f i) : SV_Target
@@ -158,12 +166,12 @@ Shader "Unlit/Parallax"
                 fixed3 VdirTS = normalize(i.VDirTS);
                 fixed3 HdirTS = normalize(LdirTS+VdirTS);
                 
-                fixed2 offset = StepParallax(i.uv,VdirTS,_ParallaxFactor);
-                i.uv += offset;
+                // fixed2 offset = StepParallax(i.uv,VdirTS,_ParallaxFactor);
+                // i.uv += offset;
                 // fixed2 offset = StepParallax(VdirTS,_ParallaxFactor);
                 // i.uv += offset;
-                // fixed2 offset = RelieParallax(VdirTS,_ParallaxFactor,i.uv);
-                // i.uv += offset;
+                fixed2 offset = RelieParallax(VdirTS,_ParallaxFactor,i.uv);
+                i.uv += offset;
                 fixed3 Var_Normal = UnpackNormalWithScale(tex2D(_NormalTex,i.uv),_BumpScale);
                 fixed Var_AO = tex2D(_AO,i.uv).r *_AOFactor;
                 fixed Var_Roughness = tex2D(_Roughness,i.uv).r * _RoughnessFactor;
