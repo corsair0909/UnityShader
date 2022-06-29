@@ -20,19 +20,19 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _AO:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: c2f90f807721a4b4281cabe8570746b9, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BumpMap:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: aaf969ade30b4b042852e5a15ebe59c2, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: fdbc825cb50dc1c45a3a14d1f0057226, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: f23b29367caf93f48b258e10f2c96caf, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Roughness:
@@ -41,7 +41,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Floats:
     - _BumpScale: 1
-    - _RoughnessFactor: 1
+    - _RoughnessFactor: 2
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []

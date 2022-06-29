@@ -8,7 +8,7 @@ Shader "Unlit/PBR"
         _AO ("AO",2D) = "white"{} 
         _MetallicTex ("Metallic",2D) = "white"{}
         _LUT ("LUT",2D) = "white"{}
-        _Roughness ("Roughness",range(0,2)) = 0.2
+        _Roughness ("Roughness",range(0,1)) = 0.2
         _BumpScale ("BumpScale",range(0,1)) = 0
     }
     SubShader
@@ -27,6 +27,7 @@ Shader "Unlit/PBR"
             sampler2D _AO;
             sampler2D _MetallicTex;
             sampler2D _LUT;
+            
             
             fixed _Roughness;
             fixed _BumpScale;
@@ -55,7 +56,6 @@ Shader "Unlit/PBR"
             }
             fixed3 FresnelSchlick(fixed roughness,float F0,fixed VdotH)
             {
-
                 return F0 + (max(float3(1-roughness,1-roughness,1-roughness),F0)-F0)* pow((1-VdotH),5);
             }
             fixed Disney(fixed VdotH,fixed NdotL,fixed NdotV,fixed roughness)
@@ -111,14 +111,19 @@ Shader "Unlit/PBR"
                 return (d*g*f) / 4*NdotV*NdotL;
             }
 
-            fixed3 IBL_Diffuse(float albedo,fixed3 Normal, float kd)
+            fixed3 IBL_Diffuse_SH(float albedo,fixed3 Normal, float kd)
             {
                 fixed3 ambient_contrib = ShadeSH9(float4(Normal,1));//球谐函数计算的光照
-                fixed3 ambient =  albedo;
+                fixed3 ambient =  0.03f * albedo;//ambient对IBL的影响非常小
                 fixed3 ibldiffuse = max(half3(0,0,0),ambient.rgb+ambient_contrib);
                 return ibldiffuse * albedo *kd;
-                
             }
+            //IBL漫反射的环境贴图计算方式
+            // fixed3 IBL_Diffuse_CubeMap(float albedo,fixed3 Normal,fixed Kd)
+            // {
+            //     fixed3 var_Cubemap = texCUBE(_Cubemap,Normal).rgb;
+            //     return var_Cubemap * albedo * Kd;
+            // }
             
             v2f vert (appdata v)
             {
@@ -164,15 +169,14 @@ Shader "Unlit/PBR"
                 fixed4 BaseCol = BaseColor(var_MainTex,_Tint,NdotH);
                 fixed3 Fresnela = FresnelSchlick(_Roughness,F0,VdotH);
                 fixed3 kd = Kd(Fresnela,var_Metallic);
+                fixed3 FresnelaNV = FresnelSchlick(_Roughness,F0,NdotV);
+                fixed3 kd_NV = Kd(FresnelaNV,var_Metallic);
                 
                 //fixed3 Diffuse = BaseCol * kd;// Cook-Torrance BRDF
                 
                 //fixed3 Diffuse = BaseCol * DisneyDiffuse(NdotV,NdotL,LdotH,_Roughness); unity内置的Disney漫反射计算公式
                 
                 fixed3 Diffuse = BaseCol * Disney(VdotH,NdotL,NdotV,_Roughness);//自定义Disney漫反射
-
-
-                
                 fixed3 Specularcol = Specular(d,g,f,NdotV,NdotL);
 
                 //IBL，LUT图的采样取决于N、V的点积和粗糙度
@@ -181,24 +185,24 @@ Shader "Unlit/PBR"
                 
                 //IBL漫反射部分
                 //shadeSH9 函数计算
-                fixed3 iblDiffuse = IBL_Diffuse(var_MainTex,Normal,kd);
+                //此处的Kd用的是NdotV的kd
+                //直接光漫反射部分的Kd是VdotH，因为直接漫反射部分使用的法线方向是与法线分布函数相关的H（半程向量）
+                //间接光漫反射的法线方向就是法线贴图中的法线方向
+                fixed3 iblDiffuse = IBL_Diffuse_SH(var_MainTex,Normal,kd_NV) ;
                 //IBL镜面反射部分
                 //可以理解为对天空盒进行采样
                 //我们使用一个环境贴图级数来对环境贴图采样，粗糙度越大反射则越模糊，对应的环境贴图级数越高。
                 //下面的式子表示级数和粗糙度并非线性关系，转换公式在Unity中有定义
                 float mip_roughness = _Roughness * (1.7 - 0.7 * _Roughness);
                 float3 reflectVec = reflect(-ViewDir,Normal);
-                half mip = mip_roughness * 6;//环境贴图级数
+                half mip = mip_roughness * 10 ;//环境贴图级数
                 half4 var_Env = UNITY_SAMPLE_TEXCUBE_LOD(unity_SpecCube0,reflectVec,mip);
-                fixed3 iblSpcular = DecodeHDR(var_Env,unity_SpecCube0_HDR)*(Fresnela * var_LUT.r + var_LUT.g);
-
+                fixed3 iblSpcular = DecodeHDR(var_Env,unity_SpecCube0_HDR)*(kd_NV * var_LUT.r + var_LUT.g);
+                
                 fixed3 inDirectLight = (iblDiffuse + iblSpcular) * var_AO;
+                fixed3 directorLight = ( Diffuse  + Specularcol) * NdotL * _Tint.rgb * _LightColor0.rgb;
                 
-                fixed3 directorLight = ( Diffuse  + Specularcol) * NdotL * _Tint.rgb;
-
-
-                
-                return fixed4(directorLight +inDirectLight ,1);
+                return fixed4(directorLight + inDirectLight ,1);
             }
             ENDCG
         }
