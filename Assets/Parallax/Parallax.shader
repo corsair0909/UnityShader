@@ -10,7 +10,7 @@ Shader "Unlit/Parallax"
         _BumpScale ("BumpScale",range(0.2,8)) = 0.2
         _AOFactor ("AOFactor",range(0,2)) = 0
         _RoughnessFactor ("RoughnessFactor",range(0.04,1)) = 0.04 
-        _ParallaxFactor ("Parallax",range(0,0.5)) = 0.2
+        _ParallaxFactor ("Parallax",range(0,1)) = 0.2
     }
     SubShader
     {
@@ -95,19 +95,56 @@ Shader "Unlit/Parallax"
                 fixed CurrentLayerDepth = 0.0f;
                 fixed2 CurrentTexcoord  = vdir.xy / vdir.z * scale;
                 fixed2 Step = CurrentTexcoord/numLayer;
-                fixed2 Offset = fixed2(0,0);
                 fixed CurrentMapDepth = tex2D(_Height,CurrentTexcoord).r;
                 for (int i = 0; i < numLayer; i++)
                 {
                     if (CurrentLayerDepth>CurrentMapDepth)
                     {
-                        return Offset;
+                        return CurrentTexcoord;
                     }
-                    Offset += Step;
-                    CurrentMapDepth = tex2D(_Height,Offset).r;
+                    CurrentTexcoord += Step;
+                    CurrentMapDepth = tex2D(_Height,CurrentTexcoord).r;
                     CurrentLayerDepth+=LayerDepth;
                 }
-                return Offset;
+                return CurrentTexcoord;
+            }
+            fixed2 RelieParallax(float3 vdir,fixed scale,float2 uv)
+            {
+                fixed numLayer = 20;
+                fixed LayerDepth = 1/numLayer;
+                fixed CurrentLayerDepth = 0.0f;
+                fixed2 CurrentTexcoord  = vdir.xy / vdir.z * scale;
+                
+                fixed LayerUVL = length(CurrentTexcoord);
+                
+                fixed2 Step = CurrentTexcoord/numLayer;
+                fixed CurrentMapDepth = tex2D(_Height,CurrentTexcoord).r;
+                for (int i = 0; i < numLayer; i++)
+                {
+                    if (CurrentLayerDepth>CurrentMapDepth)
+                    {
+                        break;
+                    }
+                    CurrentTexcoord += Step;
+                    CurrentMapDepth = tex2D(_Height,CurrentTexcoord).r;
+                    CurrentLayerDepth+=LayerDepth;
+                }
+                fixed2 afterCoord = CurrentTexcoord - Step;
+                fixed afterDepth = tex2D(_Height,afterCoord);
+                for (int i = 0; i < numLayer; ++i)
+                {
+                    fixed MidCoord = (afterCoord+CurrentTexcoord)/2;
+                    fixed MidDepth = tex2D(_Height,MidCoord).r;
+                    if (MidDepth<afterDepth)
+                    {
+                        CurrentTexcoord = afterCoord;
+                    }
+                    else
+                    {
+                        afterCoord = MidCoord;
+                    }
+                }
+                return (afterCoord+CurrentTexcoord)/2;
             }
 
             fixed4 frag (v2f i) : SV_Target
@@ -118,8 +155,12 @@ Shader "Unlit/Parallax"
                 fixed3 VdirTS = normalize(i.VDirTS);
                 fixed3 HdirTS = normalize(LdirTS+VdirTS);
                 
-                fixed2 offset = StepParallax(VdirTS,_ParallaxFactor);
+                fixed2 offset = ApplyParallax(VdirTS,_ParallaxFactor,i.uv);
                 i.uv += offset;
+                // fixed2 offset = StepParallax(VdirTS,_ParallaxFactor);
+                // i.uv += offset;
+                // fixed2 offset = RelieParallax(VdirTS,_ParallaxFactor,i.uv);
+                // i.uv += offset;
                 fixed3 Var_Normal = UnpackNormalWithScale(tex2D(_NormalTex,i.uv),_BumpScale);
                 fixed Var_AO = tex2D(_AO,i.uv).r *_AOFactor;
                 fixed Var_Roughness = tex2D(_Roughness,i.uv).r * _RoughnessFactor;
