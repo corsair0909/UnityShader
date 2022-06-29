@@ -133,28 +133,40 @@ Shader "Unlit/Parallax"
                 }
 
                 //浮雕映射部分
-                float2 T0 = uv-Step, T1 = uv + CurrentTexcoord;
+                //T1 = 表面下方的第一个点
+                //从表面下方第一个点到视线交点之间二分查找
+                float2 T1 = uv + CurrentTexcoord;
+                float2 T0 = T1 - Step;
 
+                //优化方法，来自catlikecode
+                // fixed PervHeight = tex2D(_Height,T1).r;
+                // fixed Height = tex2D(_Height,T0).r;
+                // fixed Pervdepth = CurrentLayerDepth - LayerDepth;
+                // fixed depth1 = Pervdepth-PervHeight;
+                // fixed depth2 = Height - CurrentLayerDepth;
+                // float t = depth1 / (depth1+depth2);
+                // return lerp(T1,T0,t);
+                
                 for (int j = 0;j<20;j++)
                 {
                     float2 P0 = (T0 + T1) / 2;
-
+                
                     float P0Height = tex2D(_Height, P0).r;
-
+                
                     float P0LayerHeight = length(P0) / LayerUVL;
-
+                
                     if (P0Height < P0LayerHeight)
                     {
                         T0 = P0;
-
+                
                     }
                     else
                     {
                         T1= P0;
                     }
-
+                
                 }
-
+                
                 return (T0 + T1) / 2 - uv;
             }
             
