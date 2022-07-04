@@ -112,7 +112,7 @@ Shader "Unlit/Parallax"
             }
             fixed2 RelieParallax(float3 vdir,fixed scale,float2 uv)
             {
-                fixed numLayer = 20;
+                fixed numLayer = 10;
                 fixed LayerDepth = 1/numLayer;
                 fixed CurrentLayerDepth = 0.0f;
                 fixed2 CurrentTexcoord  = vdir.xy / vdir.z * scale;
@@ -147,7 +147,7 @@ Shader "Unlit/Parallax"
                 // float t = depth1 / (depth1+depth2);
                 // return lerp(T1,T0,t);
                 
-                for (int j = 0;j<20;j++)
+                for (int j = 0;j<numLayer;j++)
                 {
                     float2 P0 = (T0 + T1) / 2;
                 
@@ -178,9 +178,9 @@ Shader "Unlit/Parallax"
                 fixed3 VdirTS = normalize(i.VDirTS);
                 fixed3 HdirTS = normalize(LdirTS+VdirTS);
                 
-                // fixed2 offset = StepParallax(i.uv,VdirTS,_ParallaxFactor);
+                // fixed2 offset = ApplyParallax(VdirTS,_ParallaxFactor,i.uv);
                 // i.uv += offset;
-                // fixed2 offset = StepParallax(VdirTS,_ParallaxFactor);
+                // fixed2 offset = StepParallax(i.uv,VdirTS,_ParallaxFactor);
                 // i.uv += offset;
                 fixed2 offset = RelieParallax(VdirTS,_ParallaxFactor,i.uv);
                 i.uv += offset;
