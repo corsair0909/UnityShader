@@ -61,8 +61,6 @@ Shader "Unlit/ParallaxCloud"
             fixed _ParallaxFactor;
             fixed _StepLayer;
             fixed _Alpha;
-            fixed _Loop;
-            fixed _Scale;
 
             fixed4 _Color;
             
@@ -75,17 +73,19 @@ Shader "Unlit/ParallaxCloud"
                 //可以少算一个TBN矩阵
                  TANGENT_SPACE_ROTATION;
                 o.VDirTS = mul(rotation,ObjSpaceViewDir(v.vertex));
+                o.LdirTS = mul(rotation,ObjSpaceLightDir(v.vertex));
                 return o;
             }
             
-            
-            
             fixed4 frag (v2f i) : SV_Target
             {
+
+                
                 float3 UV1 = float3(i.uv,0);//动态;
                 float3 UV2 = float3(i.uv2,0);//静态
-                
-                
+                float3 NdirTS = normalize(UnpackNormalWithScale(tex2D(_NormalMap,UV1),_BumpScale));
+                float3 LdirWS  = normalize(i.LdirTS);
+                float NdotL = saturate(dot(NdirTS,LdirWS));
                 float3 Vdir = normalize(i.VDirTS);
                 Vdir.xy *= _BumpScale;
                 Vdir.z += 0.42f;
@@ -93,22 +93,28 @@ Shader "Unlit/ParallaxCloud"
                 float4 MainTex = tex2D(_MainTex,UV2);    
                 float3 Offset = Vdir/(Vdir.z * _StepLayer);
                 float Height = tex2D(_MainTex,UV1).r * MainTex.r;
+                 //计算视差部分
                 fixed3 prev_uv = UV1;
-                [unroll(40)]
-                while (Height>UV1.z)
-                {
-                    UV1 += Offset;
-                    Height = 1 - tex2D(_MainTex,UV1).r * MainTex.r;
-                }
-                float d1 = Height - UV1.z;
-                float d2 = Height - prev_uv.z;
-                float w = d1 / (d1 - d2 + 0.0000001);
+                fixed3 prev_height = Height;
+                 [unroll(40)]
+                 while (Height>UV1.z)
+                 {
+                     prev_uv = UV1;
+                     prev_height = Height;
+                     UV1 += Offset;
+                     Height = tex2D(_MainTex,UV1).r * MainTex.r;
+                 }
                 
-                UV1 = lerp(UV1,prev_uv,w);
-                fixed4 result = tex2D(_MainTex,UV1) * MainTex * _Color;
+                 float d1 = Height - UV1.z;
+                 float d2 = prev_height - prev_uv.z;
+                 float w = d1 / (d1 - d2 + 0.0000001);
+                 UV1 = lerp(UV1,prev_uv,w);
+                 fixed4 result = tex2D(_MainTex,UV1) * MainTex * _Color;
+                 fixed3 finalColor = result.rgb * (NdotL*_LightColor0.rgb + 1.0);
+                
                 fixed alpha = _Alpha*0.75f + MainTex.r*result.r;
                 alpha = smoothstep(_Alpha,alpha,1.0);
-                return fixed4(result.rgb,alpha);
+                return fixed4(finalColor,alpha);
             }
             ENDCG
         }
