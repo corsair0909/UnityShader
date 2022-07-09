@@ -113,3 +113,11 @@ https://www.iflyrec.com/views/html/editor.html?id=PWmz2206281739A054F3D500008&au
 
 <img width="604" alt="截屏2022-06-30 23 07 06" src="https://user-images.githubusercontent.com/49482455/176712084-064f5a81-fe66-46cb-802b-1d3d16541503.png">
 
+
+<img width="604" alt="截屏2022-06-30 23 07 06" src="https://user-images.githubusercontent.com/49482455/176712084-064f5a81-fe66-46cb-802b-1d3d16541503.png">
+
+### [浮雕映射算法（Parallax Occulotion Mapping POM)视差云应用](https://github.com/corsair0909/-0-Shader/tree/main/Assets/Shader/Parallax/pom_Cloud)
+![Could](https://user-images.githubusercontent.com/49482455/178109629-561ed1e1-a73f-4551-9fd1-84052a54f877.gif)
+
+
+
