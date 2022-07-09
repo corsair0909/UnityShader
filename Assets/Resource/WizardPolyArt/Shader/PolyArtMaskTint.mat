@@ -32,11 +32,12 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
+    - _MaskID: 1
     - _Metallic: 0
-    - _Smoothness: 0
+    - _Smoothness: 0.22
     - __dirty: 1
     m_Colors:
-    - _Hair: {r: 0, g: 0, b: 0, a: 0}
-    - _InnerCloth: {r: 0, g: 0, b: 0, a: 0}
+    - _Hair: {r: 1, g: 0.7047619, b: 0, a: 0}
+    - _InnerCloth: {r: 1, g: 0.9669811, b: 0.9669811, a: 0}
     - _OuterChlothes: {r: 0, g: 0, b: 0, a: 0}
   m_BuildTextureStacks: []
