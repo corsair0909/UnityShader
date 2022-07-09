@@ -91,3 +91,25 @@ https://learnopengl-cn.github.io/07%20PBR/02%20Lighting/
 
 https://www.iflyrec.com/views/html/editor.html?id=PWmz2206281739A054F3D500008&audios=127173364     
 
+## [视差映射(Parallax Mapping)](https://github.com/corsair0909/-0-Shader/tree/main/Assets/Parallax)    
+为了赋予模型表面遮挡关系的细节。引入了一张高度图    
+可以和法线贴图一起使用，来产生一些真实的效果    
+高度图一般视为顶点位移来使用，此时需要三角形足够多，模型足够精细，否则看起来会有块状    
+如果在有限的三角形面的情况下，怎么办？这就用到了视差映射技术    
+
+核心技术：一张存储模型信息的高度图，利用模型表面高度信息来对纹理进行偏移（低位置的信息被高位置的信息遮挡掉了，所以会采样更高的信息）。
+
+### 普通视差映射算法
+*下面几个例子分别是在普通视差映射算法、陡峭视差映射算法、浮雕映射算法下的对比*
+<img width="709" alt="截屏2022-06-30 23 01 23" src="https://user-images.githubusercontent.com/49482455/176710901-7c8931d7-9017-4e2c-b440-6413799adde5.png">    
+### 陡峭视差映射算法.     
+<img width="604" alt="截屏2022-06-30 23 04 06" src="https://user-images.githubusercontent.com/49482455/176711353-5baf41af-ee41-46c8-b878-5f22d049e4ca.png">
+陡峭视差映射因为其分层采样深度的算法能看到在高度变化剧烈的地方产生分层，但得到的效果更好。    
+
+
+### 浮雕映射算法    
+下图是浮雕映射算法在分层100层后得到的结果
+
+
+<img width="604" alt="截屏2022-06-30 23 07 06" src="https://user-images.githubusercontent.com/49482455/176712084-064f5a81-fe66-46cb-802b-1d3d16541503.png">
+
