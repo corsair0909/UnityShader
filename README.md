@@ -118,6 +118,37 @@ https://www.iflyrec.com/views/html/editor.html?id=PWmz2206281739A054F3D500008&au
 
 ### [浮雕映射算法（Parallax Occulotion Mapping POM)视差云应用](https://github.com/corsair0909/-0-Shader/tree/main/Assets/Shader/Parallax/pom_Cloud)
 ![Could](https://user-images.githubusercontent.com/49482455/178109629-561ed1e1-a73f-4551-9fd1-84052a54f877.gif)
+#### 参考链接
 
+
+[Unity Shader基于视差映射的云海效果](https://zhuanlan.zhihu.com/p/83355147)
+
+
+[百人计划先行版笔记1（视差体积云）](https://zhuanlan.zhihu.com/p/445385622)
+
+
+## [模版测试](https://github.com/corsair0909/-0-Shader/tree/main/Assets/Shader/StencilTest)
+
+· Ref：要比较的参考值和要写入缓冲区的值 0-255之间的整数     
+· ReadMask：用于比较参考值和缓冲区中的内容 8为掩码     
+· WriteMask：指定写操作将会影响模版缓冲区的那些位置     
+· Comp：比较函数，枚举类型，默认 Always         
+· Pass：模版测试和深度测试都通过，如何处理缓冲区中的内容 默认Keep。      
+· Fail：两测试未通过如何处理，默认Keep     
+· ZFail：模版测试通过但深度测试失败，如何处理，默认Keep。   
+
+![QQ20220709-220123-HD](https://user-images.githubusercontent.com/49482455/178109912-a508f632-ec54-4a66-ac34-b3eadd7a3654.gif)
+
+
+### 参考链接
+[https://zhuanlan.zhihu.com/p/384529130](https://zhuanlan.zhihu.com/p/384529130)
+
+
+
+[LearnOpenGL](https://learnopengl-cn.github.io/04%20Advanced%20OpenGL/02%20Stencil%20testing/)
+
+
+
+[Unity Shader 模板测试（Stencil）](https://zhuanlan.zhihu.com/p/388735435)
 
 
