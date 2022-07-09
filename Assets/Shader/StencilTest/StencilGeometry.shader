@@ -21,27 +21,32 @@ Shader "Unlit/Stencil Geometry"
         
         Pass
         {
+            Tags{"LightMode"="ForwardBase"}
             CGPROGRAM
             #pragma vertex vert
             #pragma fragment frag
+            #pragma multi_compile_fwdbase  
             #include "Lighting.cginc"
+            #include "AutoLight.cginc"
 
             sampler2D _MainTex;
             half4 _Tint;
             struct v2f
             {
-                float4 vertex : SV_POSITION;
+                float4 pos : SV_POSITION;
                 float2 uv : TEXCOORD0;
                 float3 NdirWS : TEXCOORD1;
+                SHADOW_COORDS(2)
             };
             
 
             v2f vert (appdata_base v)
             {
                 v2f o;
-                o.vertex = UnityObjectToClipPos(v.vertex);
+                o.pos = UnityObjectToClipPos(v.vertex);
                 o.uv = v.texcoord;
                 o.NdirWS = UnityObjectToWorldNormal(v.normal);
+                TRANSFER_SHADOW(o);
                 return o;
             }
 
@@ -52,8 +57,8 @@ Shader "Unlit/Stencil Geometry"
                 float NdotL = saturate(dot(NdirWS,LdirWS)) * 0.5f + 0.5f;
 
                 float3 var_MainTex =  tex2D(_MainTex,i.uv) * _Tint;
-
-                float3 diffuse = _LightColor0.rgb * var_MainTex * NdotL;
+                fixed shadow = SHADOW_ATTENUATION(i);
+                float3 diffuse = _LightColor0.rgb * var_MainTex * NdotL * shadow;
                 
                 return fixed4(diffuse,1);
             }

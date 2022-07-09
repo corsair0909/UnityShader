@@ -25,8 +25,8 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Floats:
     - _CompareFuntion: 3
-    - _ID: 0
+    - _ID: 1
     - _Op: 0
     m_Colors:
-    - _Tint: {r: 0.41254762, g: 1, b: 0.41037738, a: 1}
+    - _Tint: {r: 1, g: 0.74743134, b: 0.19339621, a: 1}
   m_BuildTextureStacks: []
