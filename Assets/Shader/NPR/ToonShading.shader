@@ -9,12 +9,13 @@ Shader "Unlit/ToonShader"
         
         _LineColor("LineColor",color) = (0,0,0,0)
         _LineWidth("LineWidth",float) = 0.1
+        _LineNoiseOffset("LineNoiseOffset",vector) = (0,0,0,0)
 
     }
     SubShader
     {
-        Tags { "RenderType"="Opaque" "Queue"="Geometry" }
         
+        Tags { "RenderType"="Opaque" "Queue"="Geometry" }
         Pass
         {
             Tags{"LightMode"="ForwardBase"}
@@ -81,9 +82,11 @@ Shader "Unlit/ToonShader"
             #pragma vertex outlineVert
             #pragma fragment outlineFrag
             #include "UnityCG.cginc"
+            #include "Assets/Shader/MyShaderLabs.cginc"
 
             half4 _LineColor;
             fixed _LineWidth;
+            fixed4 _LineNoiseOffset;
             
             struct a2v
             {
@@ -92,6 +95,7 @@ Shader "Unlit/ToonShader"
                 //TODO : 顶点色控制描边颜色/粗细
                 float4 vertexColor : COLOR;
                 float4 tangent : TANGENT;
+                float2 uv : TEXCOORD0;
             };
             struct v2f
             {
@@ -110,15 +114,26 @@ Shader "Unlit/ToonShader"
                 
                 float3 viewNormal = mul(UNITY_MATRIX_IT_MV,v.tangent).xyz;
                 float3 ndcNormal = normalize(TransformViewToProjection(viewNormal) * pos.w);
-                
+
+                //
+                //近裁剪平面右上角变换到投影空间中计算新的宽高比
                 float3 nearCilpPanle = mul(unity_CameraInvProjection,float4(1, 1, UNITY_NEAR_CLIP_VALUE, _ProjectionParams.y));
                 float aspect =abs(nearCilpPanle.y/nearCilpPanle.x);
+                //float aspect = _ScreenParams.y/_ScreenParams.x;
                 ndcNormal.x *= aspect;
+
+                fixed2 noiseSample = v.uv;
+                noiseSample = noiseSample * _LineNoiseOffset.xy+_LineNoiseOffset.zw;
+                fixed noiseWidth = perlin_noise(noiseSample);
+                noiseWidth *= 2 - 1;
+
+                fixed outlineWidth = _LineWidth * noiseWidth;
                 
-                pos.xy += 0.1f * _LineWidth * ndcNormal.xy * v.vertexColor.a;
+                pos.xy += 0.1f * outlineWidth * ndcNormal.xy * v.vertexColor.a;
                 o.vertex = pos;
                 
                 o.vertexColor = v.vertexColor;
+                
                 return o;
             }
             fixed4 outlineFrag(v2f i): SV_Target
