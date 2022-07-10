@@ -1,5 +1,4 @@
 # 从0开始的着色器生活
-![69460492_p0_master1200](https://user-images.githubusercontent.com/49482455/171035627-fd5fb592-5d83-4c71-b802-9ca5123888d4.jpg)
 
 ## [billboard](https://github.com/corsair0909/-0-Shader/tree/main/Assets/BillBoard)
 ![QQ20220613-174417-HD](https://user-images.githubusercontent.com/49482455/173327281-75f4e81c-7367-42ff-9e67-595a5deb2b4b.gif)
