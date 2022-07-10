@@ -24,8 +24,8 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
-    - _Gloss: 50
+    - _Gloss: 90
     m_Colors:
-    - _Spec: {r: 1, g: 1, b: 1, a: 1}
+    - _Spec: {r: 1, g: 0.514151, b: 0.514151, a: 1}
     - _Tint: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []

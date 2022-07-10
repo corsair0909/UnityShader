@@ -1,4 +1,4 @@
-Shader "Unlit/Base"
+Shader "Unlit/ToonShader"
 {
     Properties
     {
@@ -6,13 +6,18 @@ Shader "Unlit/Base"
         _Tint ("Color",color) = (1,1,1,1)
         _Spec ("SpecColor",color) = (1,1,1,1)
         _Gloss("Gloss",range(30,90)) = 50
+        
+        _LineColor("LineColor",color) = (0,0,0,0)
+        _LineWidth("LineWidth",float) = 0.1
 
     }
     SubShader
     {
         Tags { "RenderType"="Opaque" "Queue"="Geometry" }
+        
         Pass
         {
+            Tags{"LightMode"="ForwardBase"}
             CGPROGRAM
             #pragma vertex vert
             #pragma fragment frag
@@ -49,18 +54,77 @@ Shader "Unlit/Base"
 
             fixed4 frag (v2f i) : SV_Target
             {
-                fixed3 worldNormal = normalize(i.NDirWS);
-                float3 LightDir = normalize(_WorldSpaceLightPos0.xyz);
-                fixed3 viewDir = normalize(UnityWorldSpaceViewDir(i.WorldPos));
+                // fixed3 worldNormal = normalize(i.NDirWS);
+                // float3 LightDir = normalize(_WorldSpaceLightPos0.xyz);
+                // fixed3 viewDir = normalize(UnityWorldSpaceViewDir(i.WorldPos));
+                //
+                // fixed4 var_MainTex = tex2D(_MainTex,i.uv);
+                //
+                // fixed3 halfDir = normalize(viewDir+LightDir);
+                // fixed NdotL =  saturate(dot(LightDir,worldNormal));
+                // fixed NdotH = saturate(dot(halfDir,worldNormal));
+                //
+                // fixed3 ambient = UNITY_LIGHTMODEL_AMBIENT.xyz * _Tint.rgb;
+                // fixed3 diffuse = _LightColor0.xyz * _Tint.rgb *var_MainTex.rgb * NdotL;
+                // fixed3 specualr = _LightColor0.xyz * pow(NdotH,_Gloss);
+                // return fixed4(ambient+diffuse+specualr,1.0);
+                return fixed4(1,1,1,1);
+            }
+            ENDCG
+        }
+        
+        Pass
+        {
+            Tags{"LightMode"="ForwardBase"}
+            Cull Front
+            CGPROGRAM
+            #pragma vertex outlineVert
+            #pragma fragment outlineFrag
+            #include "UnityCG.cginc"
+
+            half4 _LineColor;
+            fixed _LineWidth;
+            
+            struct a2v
+            {
+                float4 vertex : POSITION;
+                float3 normal : NORMAL;
+                //TODO : 顶点色控制描边颜色/粗细
+                float4 vertexColor : COLOR;
+                float4 tangent : TANGENT;
+            };
+            struct v2f
+            {
+                float4 vertex : SV_POSITION;
+                float4 vertexColor : TEXCOORD0;
+            };
+            v2f outlineVert (a2v v)
+            {
+                v2f o;
+                float4 pos = UnityObjectToClipPos(v.vertex);
                 
-                fixed3 halfDir = normalize(viewDir+LightDir);
-                fixed NdotL =  saturate(dot(LightDir,worldNormal));
-                fixed NdotH = saturate(dot(halfDir,worldNormal));
+                //float3 viewNormal = mul(UNITY_MATRIX_IT_MV,v.normal).xyz; 
+                //投影变换完成后得到的xy的范围在[-w,w]内。随后管线会将坐标除以w得到[-1,1]（ndc）范围下的坐标，
+                //可以理解为如果以参 UnityObjectToClipPos(float4(v.vertex.xyz + v.normal * _OutlineWidth * 0.1 ,1))
+                //参与后续计算，结果会被管线除以W分量从而得到不同于指定好的轮廓线宽度，在透视除法之前乘以W分量抵消后续计算的除以W分量的影响
                 
-                fixed3 ambient = UNITY_LIGHTMODEL_AMBIENT.xyz * _Tint.rgb;
-                fixed3 diffuse = _LightColor0.xyz * _Tint.rgb * NdotL;
-                fixed3 specualr = _LightColor0.xyz * pow(NdotH,_Gloss);
-                return fixed4(ambient+diffuse+specualr,1.0);
+                float3 viewNormal = mul(UNITY_MATRIX_IT_MV,v.tangent).xyz;
+                float3 ndcNormal = normalize(TransformViewToProjection(viewNormal) * pos.w);
+                
+                float3 nearCilpPanle = mul(unity_CameraInvProjection,float4(1, 1, UNITY_NEAR_CLIP_VALUE, _ProjectionParams.y));
+                float aspect =abs(nearCilpPanle.y/nearCilpPanle.x);
+                ndcNormal.x *= aspect;
+                
+                pos.xy += 0.1f * _LineWidth * ndcNormal.xy * v.vertexColor.a;
+                o.vertex = pos;
+                
+                o.vertexColor = v.vertexColor;
+                return o;
+            }
+            fixed4 outlineFrag(v2f i): SV_Target
+            {
+                fixed3 finalColor = _LineColor.rgb * i.vertexColor.rgb;
+                return fixed4(finalColor,1.0f);
             }
             ENDCG
         }
