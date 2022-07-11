@@ -10,6 +10,8 @@ Shader "Unlit/ToonShader"
         _LineColor("LineColor",color) = (0,0,0,0)
         _LineWidth("LineWidth",float) = 0.1
         _LineNoiseOffset("LineNoiseOffset",vector) = (0,0,0,0)
+        
+        _Dividline("divid",float) = 1
 
     }
     SubShader
@@ -42,6 +44,7 @@ Shader "Unlit/ToonShader"
             half4 _Spec;
 
             fixed _Gloss;
+            fixed _Dividline;
             
             v2f vert (appdata_tan v)
             {
@@ -55,21 +58,21 @@ Shader "Unlit/ToonShader"
 
             fixed4 frag (v2f i) : SV_Target
             {
-                // fixed3 worldNormal = normalize(i.NDirWS);
-                // float3 LightDir = normalize(_WorldSpaceLightPos0.xyz);
-                // fixed3 viewDir = normalize(UnityWorldSpaceViewDir(i.WorldPos));
-                //
-                // fixed4 var_MainTex = tex2D(_MainTex,i.uv);
-                //
-                // fixed3 halfDir = normalize(viewDir+LightDir);
-                // fixed NdotL =  saturate(dot(LightDir,worldNormal));
-                // fixed NdotH = saturate(dot(halfDir,worldNormal));
-                //
-                // fixed3 ambient = UNITY_LIGHTMODEL_AMBIENT.xyz * _Tint.rgb;
-                // fixed3 diffuse = _LightColor0.xyz * _Tint.rgb *var_MainTex.rgb * NdotL;
+                fixed3 worldNormal = normalize(i.NDirWS);
+                float3 LightDir = normalize(_WorldSpaceLightPos0.xyz);
+                fixed3 viewDir = normalize(UnityWorldSpaceViewDir(i.WorldPos));
+                
+                fixed4 var_MainTex = tex2D(_MainTex,i.uv);
+                
+                fixed3 halfDir = normalize(viewDir+LightDir);
+                fixed NdotL =  saturate(dot(LightDir,worldNormal));
+                fixed NdotH = saturate(dot(halfDir,worldNormal));
+                
+                fixed3 ambient = UNITY_LIGHTMODEL_AMBIENT.xyz * _Tint.rgb;
+                fixed3 diffuse = _LightColor0.xyz * _Tint.rgb *var_MainTex.rgb * NdotL;
                 // fixed3 specualr = _LightColor0.xyz * pow(NdotH,_Gloss);
-                // return fixed4(ambient+diffuse+specualr,1.0);
-                return fixed4(1,1,1,1);
+               //return fixed4(ambient+diffuse+specualr,1.0);
+                return fixed4(diffuse+ambient,1);
             }
             ENDCG
         }
@@ -127,7 +130,7 @@ Shader "Unlit/ToonShader"
                 fixed noiseWidth = perlin_noise(noiseSample);
                 noiseWidth *= 2 - 1;
 
-                fixed outlineWidth = _LineWidth * noiseWidth;
+                fixed outlineWidth = _LineWidth+_LineWidth * noiseWidth;
                 
                 pos.xy += 0.1f * outlineWidth * ndcNormal.xy * v.vertexColor.a;
                 o.vertex = pos;
