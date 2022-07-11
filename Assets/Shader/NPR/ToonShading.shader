@@ -15,6 +15,7 @@ Shader "Unlit/ToonShader"
         _rimMax("RimMax",float) = 0
         _rimSmoothStep("SmoothStep",float) = 0
         _rimColor("RimColor",color) = (1,1,1,1)
+        _rimPower("rimPower",float) = 1
         
         [Space(15)]
         _LineColor("LineColor",color) = (0,0,0,0)
@@ -101,6 +102,7 @@ Shader "Unlit/ToonShader"
             fixed _ClearCoatMult;
             fixed _ClearCotaGloss;
             fixed _LerpMax;
+            fixed _rimPower;
             
             v2f vert (appdata_tan v)
             {
@@ -141,7 +143,8 @@ Shader "Unlit/ToonShader"
                 fixed r = 1 - VdotN;
                 half rim = smoothstep(_rimMin,_rimMax,r);
                 rim = smoothstep(0,_rimSmoothStep,rim);
-                fixed4 rimCol = rim * _rimColor * NdotL;
+                fixed4 rimCol = rim * _rimColor;
+                half rimBloom = pow(r,_rimPower) * NdotL;
                 
                 fixed3 ambient = UNITY_LIGHTMODEL_AMBIENT.xyz * _Tint.rgb;
                 fixed3 diffuse =  var_MainTex.rgb * var_RampTex;
@@ -158,7 +161,7 @@ Shader "Unlit/ToonShader"
                 fixed shadow = SHADOW_ATTENUATION(i);
                 
                 fixed3 FinalColor = _LightColor0.xyz *(diffuse+clearCoatColor+ambient+rimCol) * shadow;
-                return fixed4(FinalColor,rim);
+                return fixed4(FinalColor,rimBloom);
 
                 //return rimCol;
 
