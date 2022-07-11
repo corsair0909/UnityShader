@@ -1,0 +1,54 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: AsukiBody
+  m_Shader: {fileID: 4800000, guid: d537dd0d00b9a4f8fbc005d94cc34971, type: 3}
+  m_ShaderKeywords: 
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _MainTex:
+        m_Texture: {fileID: 2800000, guid: d693cb84f7edb483789ac0bd93d25ee3, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _RampTex:
+        m_Texture: {fileID: 2800000, guid: 410e20032ad724c8ba2b114892e44c67, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Floats:
+    - _ClearCoatMult: 0.3
+    - _ClearCotaGloss: 81.8
+    - _Dividline: 0.52
+    - _Gloss: 90
+    - _LineWidth: 0.03
+    - _ShadowRange: 1
+    - _ShadowRangeH: 0.95
+    - _ShadowRangeL: 0.65
+    - _ShadowRangeM: 0.85
+    - _Threshold: 0.6
+    - _rimMax: 1.14
+    - _rimMin: 0.42
+    - _rimSmoothStep: 3.42
+    m_Colors:
+    - _ClearCoatCol: {r: 1, g: 0.7688679, b: 0.7688679, a: 1}
+    - _LineColor: {r: 0.2264151, g: 0.2264151, b: 0.2264151, a: 0}
+    - _LineNoiseOffset: {r: 0.18, g: 4.58, b: 1.72, a: 1.22}
+    - _ShadowColor: {r: 1, g: 1, b: 1, a: 0}
+    - _Spec: {r: 1, g: 1, b: 1, a: 1}
+    - _SpecCol: {r: 0.6981132, g: 0.57122475, b: 0.3721075, a: 1}
+    - _Tint: {r: 0.8867924, g: 0.8867924, b: 0.8867924, a: 1}
+    - _Tint2: {r: 0.6132076, g: 0.6132076, b: 0.6132076, a: 0}
+    - _rimColor: {r: 1, g: 0.8160377, b: 0.8160377, a: 1}
+  m_BuildTextureStacks: []
