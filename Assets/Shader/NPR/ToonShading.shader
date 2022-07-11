@@ -27,14 +27,13 @@ Shader "Unlit/ToonShader"
     }
     SubShader
     {
-        
-        Tags { "RenderType"="Opaque" "Queue"="Geometry" }
         Pass
         {
             Tags{"LightMode"="ShadowCaster"}
             CGPROGRAM
             #pragma vertex vert
             #pragma fragment frag
+            #pragma multi_compile_shadowcaster
             #include "UnityCG.cginc"
 
             struct v2f
@@ -60,19 +59,22 @@ Shader "Unlit/ToonShader"
             CGPROGRAM
             #pragma vertex vert
             #pragma fragment frag
+            #pragma multi_compile_fwdbase
             #include "UnityCG.cginc"
             #include "Lighting.cginc"
+            #include "AutoLight.cginc"
 
             #define SmoothnessAA 0.000002
 
             struct v2f
             {
                 float2 uv      : TEXCOORD0;
-                float4 vertex  : SV_POSITION;
+                float4 pos  : SV_POSITION;
                 float3 NDirWS  : TEXCOORD1;
                 float3 TDirWS  : TEXCOORD2;
                 float3 BTDirWS : TEXCOORD3;
                 float4 WorldPos : TEXCOORD4;
+                SHADOW_COORDS(5)
             };
 
             sampler2D _MainTex;
@@ -93,10 +95,11 @@ Shader "Unlit/ToonShader"
             v2f vert (appdata_tan v)
             {
                 v2f o;
-                o.vertex = UnityObjectToClipPos(v.vertex);
+                o.pos = UnityObjectToClipPos(v.vertex);
                 o.uv = TRANSFORM_TEX(v.texcoord, _MainTex);
                 o.NDirWS = mul(unity_ObjectToWorld,v.normal).xyz;
                 o.WorldPos = mul(unity_ObjectToWorld,v.vertex);
+                TRANSFER_SHADOW(o);
                 return o;
             }
 
@@ -126,8 +129,10 @@ Shader "Unlit/ToonShader"
 
                 fixed Cota = ((pow(VdotN,_ClearCotaGloss)) > (1 - _Threshold) ? _ClearCoatMult : 0);
                 fixed3 clearCoatColor = _ClearCoatCol.rgb * Cota;
+
+                fixed shadow = SHADOW_ATTENUATION(i);
                 
-                fixed3 FinalColor = _LightColor0.xyz *(diffuse+clearCoatColor+ambient+rimCol);
+                fixed3 FinalColor = _LightColor0.xyz *(diffuse+clearCoatColor+ambient+rimCol)*shadow;
                 return fixed4(FinalColor,1);
                 //return rimCol;
             }
