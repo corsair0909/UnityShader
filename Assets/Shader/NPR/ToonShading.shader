@@ -3,16 +3,27 @@ Shader "Unlit/ToonShader"
     Properties
     {
         _MainTex ("Texture", 2D) = "white" {}
-        _Tint ("Color",color) = (1,1,1,1)
-        _Spec ("SpecColor",color) = (1,1,1,1)
-        _Gloss("Gloss",range(30,90)) = 50
+        _RampTex ("RampTex" ,2D) = "white" {}
         
+        [Space(15)]
+        _Tint ("LightCol",color) = (1,1,1,1)
+        _Threshold("Threshold",float) = 0
+        
+        [Space(15)]
+        _rimMin("RimMin",float) = 0
+        _rimMax("RimMax",float) = 0
+        _rimSmoothStep("SmoothStep",float) = 0
+        _rimColor("RimColor",color) = (1,1,1,1)
+        
+        [Space(15)]
         _LineColor("LineColor",color) = (0,0,0,0)
         _LineWidth("LineWidth",float) = 0.1
         _LineNoiseOffset("LineNoiseOffset",vector) = (0,0,0,0)
         
-        _Dividline("divid",float) = 1
-
+        [Space(15)]
+        _ClearCoatMult("ClearCoatMult",float) = 0.1
+        _ClearCoatCol ("_ClearCoatColor",Color) = (1,1,1,1)
+        _ClearCotaGloss("_ClearCotaGloss",range(30,90)) = 50
     }
     SubShader
     {
@@ -20,12 +31,39 @@ Shader "Unlit/ToonShader"
         Tags { "RenderType"="Opaque" "Queue"="Geometry" }
         Pass
         {
+            Tags{"LightMode"="ShadowCaster"}
+            CGPROGRAM
+            #pragma vertex vert
+            #pragma fragment frag
+            #include "UnityCG.cginc"
+
+            struct v2f
+            {
+                V2F_SHADOW_CASTER;
+            };
+            v2f vert(appdata_base v)
+            {
+                v2f o;
+                TRANSFER_SHADOW_CASTER_NORMALOFFSET(o);
+                return o;
+            }
+            fixed4 frag(v2f i) : SV_Target
+            {
+                SHADOW_CASTER_FRAGMENT(i);
+            }
+            ENDCG
+        }
+        Pass
+        {
+            Name "Lighting"
             Tags{"LightMode"="ForwardBase"}
             CGPROGRAM
             #pragma vertex vert
             #pragma fragment frag
             #include "UnityCG.cginc"
             #include "Lighting.cginc"
+
+            #define SmoothnessAA 0.000002
 
             struct v2f
             {
@@ -39,12 +77,18 @@ Shader "Unlit/ToonShader"
 
             sampler2D _MainTex;
             float4 _MainTex_ST;
+            sampler2D _RampTex;
 
             half4 _Tint;
-            half4 _Spec;
-
-            fixed _Gloss;
-            fixed _Dividline;
+            half4 _rimColor;
+            half4 _ClearCoatCol;
+            
+            fixed _rimMin;
+            fixed _rimMax;
+            fixed _rimSmoothStep;
+            fixed _Threshold;
+            fixed _ClearCoatMult;
+            fixed _ClearCotaGloss;
             
             v2f vert (appdata_tan v)
             {
@@ -62,23 +106,37 @@ Shader "Unlit/ToonShader"
                 float3 LightDir = normalize(_WorldSpaceLightPos0.xyz);
                 fixed3 viewDir = normalize(UnityWorldSpaceViewDir(i.WorldPos));
                 
-                fixed4 var_MainTex = tex2D(_MainTex,i.uv);
+                fixed4 var_MainTex = tex2D(_MainTex,i.uv) * _Tint;
                 
                 fixed3 halfDir = normalize(viewDir+LightDir);
-                fixed NdotL =  saturate(dot(LightDir,worldNormal));
                 fixed NdotH = saturate(dot(halfDir,worldNormal));
+                fixed NdotL =  saturate(dot(LightDir,worldNormal)) * 0.5f+0.5f;
+                fixed VdotN = saturate(dot(viewDir,worldNormal));
+
+                fixed4 var_RampTex = tex2D(_RampTex,float2(NdotL,NdotL));
+
+                fixed r = 1 - VdotN;
+                half rim = smoothstep(_rimMin,_rimMax,r);
+                rim = smoothstep(0,_rimSmoothStep,rim);
+                fixed4 rimCol = rim * _rimColor;
                 
                 fixed3 ambient = UNITY_LIGHTMODEL_AMBIENT.xyz * _Tint.rgb;
-                fixed3 diffuse = _LightColor0.xyz * _Tint.rgb *var_MainTex.rgb * NdotL;
-                // fixed3 specualr = _LightColor0.xyz * pow(NdotH,_Gloss);
-               //return fixed4(ambient+diffuse+specualr,1.0);
-                return fixed4(diffuse+ambient,1);
+                
+                fixed3 diffuse =  var_MainTex.rgb * var_RampTex;
+
+                fixed Cota = ((pow(VdotN,_ClearCotaGloss)) > (1 - _Threshold) ? _ClearCoatMult : 0);
+                fixed3 clearCoatColor = _ClearCoatCol.rgb * Cota;
+                
+                fixed3 FinalColor = _LightColor0.xyz *(diffuse+clearCoatColor+ambient+rimCol);
+                return fixed4(FinalColor,1);
+                //return rimCol;
             }
             ENDCG
         }
         
         Pass
         {
+            Name "outline"
             Tags{"LightMode"="ForwardBase"}
             Cull Front
             CGPROGRAM

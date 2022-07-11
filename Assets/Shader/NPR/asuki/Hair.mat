@@ -39,7 +39,7 @@ Material:
     m_Colors:
     - _ClearCoatCol: {r: 0.4245283, g: 0.4245283, b: 0.4245283, a: 1}
     - _LineColor: {r: 0.1509434, g: 0.1509434, b: 0.1509434, a: 1}
-    - _LineNoiseOffset: {r: 1.6, g: 0.73, b: 2.83, a: 0.66}
+    - _LineNoiseOffset: {r: 3.59, g: 6.92, b: 2.83, a: 0.66}
     - _SpecCol: {r: 1, g: 0.96974945, b: 0.7311321, a: 1}
     - _Tint: {r: 1, g: 0.7783019, b: 0.7783019, a: 1}
     - _rimColor: {r: 0.96470594, g: 0.7058824, b: 0.43529415, a: 1}

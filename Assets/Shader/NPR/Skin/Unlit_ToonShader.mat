@@ -20,15 +20,34 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _MainTex:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: e9292bd0d9dbc4ea7aa48da4a572ba5f, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _RampTex:
+        m_Texture: {fileID: 2800000, guid: 784bfdd08be0c4ff88a17e2d508fc8a2, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
-    - _Gloss: 50
-    - _LineWidth: 1
+    - _ClearCoatMult: 0.1
+    - _Dividline: 0.52
+    - _Gloss: 90
+    - _LineWidth: 0.02
+    - _ShadowRange: 1
+    - _ShadowRangeH: 0.95
+    - _ShadowRangeL: 0.65
+    - _ShadowRangeM: 0.85
+    - _Threshold: 0.6
+    - _rimMax: 1.17
+    - _rimMin: 0.16
+    - _rimSmoothStep: 1.79
     m_Colors:
+    - _ClearCoatCol: {r: 1, g: 1, b: 1, a: 1}
     - _LineColor: {r: 0, g: 0, b: 0, a: 0}
-    - _LineNoiseOffset: {r: 1.5, g: 2, b: 4.19, a: 0.35}
+    - _LineNoiseOffset: {r: 3.34, g: 0.86, b: 1.72, a: 1.22}
+    - _ShadowColor: {r: 1, g: 1, b: 1, a: 0}
     - _Spec: {r: 1, g: 1, b: 1, a: 1}
-    - _Tint: {r: 1, g: 1, b: 1, a: 1}
+    - _SpecCol: {r: 0.6981132, g: 0.57122475, b: 0.3721075, a: 1}
+    - _Tint: {r: 0.6981132, g: 0.6981132, b: 0.6981132, a: 1}
+    - _Tint2: {r: 0.6132076, g: 0.6132076, b: 0.6132076, a: 0}
+    - _rimColor: {r: 1, g: 0.8160377, b: 0.8160377, a: 1}
   m_BuildTextureStacks: []
