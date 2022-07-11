@@ -150,4 +150,19 @@ https://www.iflyrec.com/views/html/editor.html?id=PWmz2206281739A054F3D500008&au
 
 [Unity Shader 模板测试（Stencil）](https://zhuanlan.zhihu.com/p/388735435)
 
+## [卡通渲染(NPR)](https://github.com/corsair0909/UnityShader/tree/main/Assets/Shader/NPR).    
+<img width="1153" alt="截屏2022-07-11 21 53 32" src="https://user-images.githubusercontent.com/49482455/178281487-f8be6df2-68db-4432-98f4-07a7faef7f1e.png">
 
+
+<img width="1285" alt="截屏2022-07-11 16 08 18" src="https://user-images.githubusercontent.com/49482455/178283292-f51229fe-7e57-4e4d-8915-17a3b5957def.png">
+
+
+实现思路见代码注释，注意点较多
+### 参考链接。    
+[从零开始的卡通渲染](https://zhuanlan.zhihu.com/p/109101851).     
+[卡通渲染基本光照模型的实现](https://zhuanlan.zhihu.com/p/95986273).         
+[原神Shader渲染还原解析](https://zhuanlan.zhihu.com/p/435005339).      
+[Unity着色器《原神》面部平滑阴影解决思路](https://zhuanlan.zhihu.com/p/402037562).     
+[原神角色渲染Shader分析还原](https://zhuanlan.zhihu.com/p/360229590).       
+[神作面部阴影渲染还原](https://zhuanlan.zhihu.com/p/279334552).      
+[二次元角色卡通渲染—面部篇](https://zhuanlan.zhihu.com/p/411188212).     
