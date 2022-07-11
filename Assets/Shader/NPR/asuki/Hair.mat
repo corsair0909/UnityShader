@@ -36,14 +36,14 @@ Material:
     - _ClearCotaGloss: 59
     - _Gloss: 90
     - _LerpMax: 0
-    - _LineWidth: 0.02
+    - _LineWidth: 0.03
     - _Threshold: 0.84
     - _rimMax: 2.23
     - _rimMin: 0.37
     - _rimSmoothStep: 0.45
     m_Colors:
     - _ClearCoatCol: {r: 0.4245283, g: 0.4245283, b: 0.4245283, a: 1}
-    - _LineColor: {r: 0.1509434, g: 0.1509434, b: 0.1509434, a: 1}
+    - _LineColor: {r: 0.2784314, g: 0.25882354, b: 0.27058825, a: 1}
     - _LineNoiseOffset: {r: 3.59, g: 6.92, b: 2.83, a: 0.66}
     - _ShadowColor: {r: 0, g: 0, b: 0, a: 0}
     - _SpecCol: {r: 1, g: 0.96974945, b: 0.7311321, a: 1}
