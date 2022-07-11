@@ -4,6 +4,7 @@ Shader "Unlit/ToonShader"
     {
         _MainTex ("Texture", 2D) = "white" {}
         _RampTex ("RampTex" ,2D) = "white" {}
+        _FaceLightmapTex("FaceLightMap",2D) = "white"{}
         
         [Space(15)]
         _Tint ("LightCol",color) = (1,1,1,1)
@@ -24,34 +25,38 @@ Shader "Unlit/ToonShader"
         _ClearCoatMult("ClearCoatMult",float) = 0.1
         _ClearCoatCol ("_ClearCoatColor",Color) = (1,1,1,1)
         _ClearCotaGloss("_ClearCotaGloss",range(30,90)) = 50
+        
+        [Space(15)]
+        _LerpMax ("lerp",float) = 0
+        _ShadowColor("ShadowColor",color) = (0,0,0,0)
     }
     SubShader
     {
-        Pass
-        {
-            Tags{"LightMode"="ShadowCaster"}
-            CGPROGRAM
-            #pragma vertex vert
-            #pragma fragment frag
-            #pragma multi_compile_shadowcaster
-            #include "UnityCG.cginc"
-
-            struct v2f
-            {
-                V2F_SHADOW_CASTER;
-            };
-            v2f vert(appdata_base v)
-            {
-                v2f o;
-                TRANSFER_SHADOW_CASTER_NORMALOFFSET(o);
-                return o;
-            }
-            fixed4 frag(v2f i) : SV_Target
-            {
-                SHADOW_CASTER_FRAGMENT(i);
-            }
-            ENDCG
-        }
+//        Pass
+//        {
+//            Tags{"LightMode"="ShadowCaster"}
+//            CGPROGRAM
+//            #pragma vertex vert
+//            #pragma fragment frag
+//            #pragma multi_compile_shadowcaster
+//            #include "UnityCG.cginc"
+//
+//            struct v2f
+//            {
+//                V2F_SHADOW_CASTER;
+//            };
+//            v2f vert(appdata_base v)
+//            {
+//                v2f o;
+//                TRANSFER_SHADOW_CASTER_NORMALOFFSET(o);
+//                return o;
+//            }
+//            fixed4 frag(v2f i) : SV_Target
+//            {
+//                SHADOW_CASTER_FRAGMENT(i);
+//            }
+//            ENDCG
+//        }
         Pass
         {
             Name "Lighting"
@@ -60,10 +65,12 @@ Shader "Unlit/ToonShader"
             #pragma vertex vert
             #pragma fragment frag
             #pragma multi_compile_fwdbase
+            
+            #pragma shader_feature _Face
+            
             #include "UnityCG.cginc"
             #include "Lighting.cginc"
             #include "AutoLight.cginc"
-
             #define SmoothnessAA 0.000002
 
             struct v2f
@@ -80,10 +87,12 @@ Shader "Unlit/ToonShader"
             sampler2D _MainTex;
             float4 _MainTex_ST;
             sampler2D _RampTex;
+            sampler2D _FaceLightmapTex;
 
             half4 _Tint;
             half4 _rimColor;
             half4 _ClearCoatCol;
+            half4 _ShadowColor;
             
             fixed _rimMin;
             fixed _rimMax;
@@ -91,6 +100,7 @@ Shader "Unlit/ToonShader"
             fixed _Threshold;
             fixed _ClearCoatMult;
             fixed _ClearCotaGloss;
+            fixed _LerpMax;
             
             v2f vert (appdata_tan v)
             {
@@ -116,25 +126,42 @@ Shader "Unlit/ToonShader"
                 fixed NdotL =  saturate(dot(LightDir,worldNormal)) * 0.5f+0.5f;
                 fixed VdotN = saturate(dot(viewDir,worldNormal));
 
-                fixed4 var_RampTex = tex2D(_RampTex,float2(NdotL,NdotL));
-
+                //SDF面部阴影计算
+                fixed4 var_face1 = tex2D(_FaceLightmapTex,i.uv);
+                fixed4 var_face2 = tex2D(_FaceLightmapTex,float2(1-i.uv.x,i.uv.y));
+                float2 Left = normalize(mul(unity_ObjectToWorld,float3(1, 0, 0))).xy;	//世界空间角色正左侧方向向量
+                float2 Front = normalize(mul(unity_ObjectToWorld,float3(1, 0, 0))).xy;
+                float ctrl = 1-clamp(0,1,dot(Front,LightDir)*0.5f+0.5f);
+                float ilm = dot(LightDir, Left) > 0 ? var_face1.r : var_face2.r;
+                float isSahdow = step(ilm, ctrl);
+                fixed bias = smoothstep(0, _LerpMax, abs(ctrl - ilm));//平滑边界，smoothstep的原理和用法可以参考我上一篇文章
+                
+                
+                fixed4 var_RampTex = tex2D(_RampTex,float2(NdotL,0.5f));
                 fixed r = 1 - VdotN;
                 half rim = smoothstep(_rimMin,_rimMax,r);
                 rim = smoothstep(0,_rimSmoothStep,rim);
                 fixed4 rimCol = rim * _rimColor;
                 
                 fixed3 ambient = UNITY_LIGHTMODEL_AMBIENT.xyz * _Tint.rgb;
-                
                 fixed3 diffuse =  var_MainTex.rgb * var_RampTex;
+                
+                if (ctrl > 0.99 || isSahdow == 1)
+                {
+                    diffuse = lerp(diffuse,diffuse*_ShadowColor.rgb,bias);
+                }
+                    
 
                 fixed Cota = ((pow(VdotN,_ClearCotaGloss)) > (1 - _Threshold) ? _ClearCoatMult : 0);
                 fixed3 clearCoatColor = _ClearCoatCol.rgb * Cota;
 
-                fixed shadow = SHADOW_ATTENUATION(i);
+                // fixed shadow = SHADOW_ATTENUATION(i);
                 
-                fixed3 FinalColor = _LightColor0.xyz *(diffuse+clearCoatColor+ambient+rimCol)*shadow;
+                fixed3 FinalColor = _LightColor0.xyz *(diffuse+clearCoatColor+ambient+rimCol);
                 return fixed4(FinalColor,1);
+
                 //return rimCol;
+
             }
             ENDCG
         }

@@ -19,6 +19,10 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
+    - _FaceLightmapTex:
+        m_Texture: {fileID: 2800000, guid: c2fa1163e711045248fd7fc4b368f093, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _MainTex:
         m_Texture: {fileID: 2800000, guid: 0afdebd65545b4273a30aa8ee4bf24eb, type: 3}
         m_Scale: {x: 1, y: 1}
@@ -31,6 +35,7 @@ Material:
     - _ClearCoatMult: 0
     - _ClearCotaGloss: 50
     - _Gloss: 90
+    - _LerpMax: 0.2
     - _LineWidth: 0.02
     - _Threshold: 0.84
     - _rimMax: 1.58
@@ -39,7 +44,8 @@ Material:
     m_Colors:
     - _ClearCoatCol: {r: 0.9811321, g: 0.9479649, b: 0.92096835, a: 1}
     - _LineColor: {r: 0.254717, g: 0.254717, b: 0.254717, a: 1}
-    - _LineNoiseOffset: {r: 1.6, g: 0.73, b: 2.83, a: 0.66}
+    - _LineNoiseOffset: {r: 2.62, g: 9.45, b: 2.83, a: 0.66}
+    - _ShadowColor: {r: 0.93725497, g: 0.78823537, b: 0.6431373, a: 1}
     - _SpecCol: {r: 1, g: 0.96974945, b: 0.7311321, a: 1}
     - _Tint: {r: 0.7735849, g: 0.7735849, b: 0.7735849, a: 1}
     - _rimColor: {r: 0.5471698, g: 0.37673986, b: 0, a: 1}
