@@ -30,7 +30,15 @@ Shader "Unlit/FlowMap2"
         
         [Space(15)]
         [Header(WaveParameter)]
-        _Amplitude("Amplitude",range(0,1)) = 0.45
+        //_Amplitude("Amplitude(波振幅)",float) = 0.45
+//        _WaveLength("WaveLength(波长)",float) = 0
+        _WaveSpeed("WaveSpeed(波速度)",float) = 1
+//        _Steepness("Steepness",range(0,1)) = 0.5
+//        _WaveDirection("WaveDir(2D)",vector) = (1,0,0,0)
+        
+        _WaveA("WaveA(dir,steepness,wavelength)",vector) = (1,1,0.5,50)
+        _WaveB("WaveB",vector) = (0,1,0.25,20)
+        _WaveC("WaveC",vector) = (1,1.3,0.25,18)
     }
     SubShader
     {
@@ -72,16 +80,44 @@ Shader "Unlit/FlowMap2"
             fixed _Tiling;
             fixed _NormalScale,_Gloss;
 
-            fixed _Amplitude;
+            fixed _WaveSpeed;//_Amplitude,_WaveLength,_Steepness;
+            //fixed4 _WaveDirection;
+            fixed4 _WaveA,_WaveB,_WaveC;
 
             half4 _Color;
+
+            float3 WaveValue(float4 wave,float3 vertex)
+            {
+                //float3 Wave;
+
+                float length = wave.w;
+                float steepness = wave.z;
+                //正弦波总长度为2PI，2PI/波长 = 波数
+                float waveNum = 2 * UNITY_PI / length;
+                
+                float a = steepness/waveNum;//防循环
+
+                float2 dir = normalize(wave.xy);
+                
+                
+                float f = waveNum*(dot(dir,vertex.xz) - _WaveSpeed*_Time.y);//波数 * （顶点加上偏移量（正负方向））
+                
+                return float3(dir.x*(a*cos(f)),
+                                a*sin(f),
+                                dir.y * (a*cos(f)));
+            }
+            
             
             v2f vert (appdata v)
             {
                 v2f o;
 
                 float4 WaveVertex = v.vertex;
-                WaveVertex.y = _Amplitude*sin(WaveVertex.x);
+                float4 wave = WaveVertex;
+                wave.xyz += WaveValue(_WaveA,wave);
+                wave.xyz +=WaveValue(_WaveB,wave);
+                wave.xyz +=WaveValue(_WaveC,wave);
+                WaveVertex = wave;
                 
                 o.vertex = UnityObjectToClipPos(WaveVertex);
                 
@@ -91,6 +127,8 @@ Shader "Unlit/FlowMap2"
                 o.VdirTS = mul(rotation,ObjSpaceViewDir(v.vertex));
                 return o;
             }
+
+
             float3 FlowUVW(float2 uv,float2 offset,float tiling,float2 jump,float time,bool flow)
             {
                 float LoopOffset = flow? 0.5:0;
