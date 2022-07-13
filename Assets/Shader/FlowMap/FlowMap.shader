@@ -60,6 +60,7 @@ Shader "Unlit/FlowMap"
                 fixed4 col1 = tex2D(_MainTex, TillingUV-var_FlowMap.xy * phase1);
 
                 fixed t = abs((0.5f-phase0)/0.5f);
+                //fixed t = 1-abs(1-2*phase0);
                 fixed3 finalColor = lerp(col0,col1,t);
                 return fixed4(finalColor,1);
             }
