@@ -114,11 +114,12 @@ Shader "Unlit/FlowMap2"
 
                 float4 WaveVertex = v.vertex;
                 float4 wave = WaveVertex;
+                //叠加波形
                 wave.xyz += WaveValue(_WaveA,wave);
                 wave.xyz +=WaveValue(_WaveB,wave);
                 wave.xyz +=WaveValue(_WaveC,wave);
                 WaveVertex = wave;
-                
+                //将顶点动画计算过的顶点变换到裁剪空间下                
                 o.vertex = UnityObjectToClipPos(WaveVertex);
                 
                 o.uv = TRANSFORM_TEX(v.uv, _MainTex);
@@ -131,26 +132,28 @@ Shader "Unlit/FlowMap2"
 
             float3 FlowUVW(float2 uv,float2 offset,float tiling,float2 jump,float time,bool flow)
             {
-                float LoopOffset = flow? 0.5:0;
-                float pregress = frac(time+LoopOffset);
+                //jump部分没看懂
+                
+                float LoopOffset = flow? 0.5:0;//函数偏移半个周期
+                float pregress = frac(time+LoopOffset);//将两次偏移错开半个周期，否则，取小数部分，否则会出现bug
                 float3 UVW;//带有权重的返回值，W分量保存权重
 
-                UVW.xy = uv - offset * (pregress+_FlowOffset);
-                //
+                UVW.xy = uv - offset * (pregress+_FlowOffset);//uv偏移计算
+                //缩放uv
                 UVW.xy *= tiling;
-                //将两次偏移错开半个周期，否则每秒循环两次
+                //每秒循环两次，采样结果也错开半个周期
                 UVW.xy +=LoopOffset;
                 //构造相差半个周期的权重，W(1) = W(0) = 0 ，W(1/2) = W(1/2) = 1 ，
                 UVW.z = 1-abs(1-2*pregress);
                 return UVW;
             }
 
-            float3 UnpackDerivativeMap(float4 var_DerivativeMap)
-            {
-                float3 rgb = var_DerivativeMap.agb;
-                rgb.xy *= 2 - 1;
-                return rgb;
-            }
+            // float3 UnpackDerivativeMap(float4 var_DerivativeMap)
+            // {
+            //     float3 rgb = var_DerivativeMap.agb;
+            //     rgb.xy *= 2 - 1;
+            //     return rgb;
+            // }
 
             fixed4 frag (v2f i) : SV_Target
             {
@@ -160,25 +163,30 @@ Shader "Unlit/FlowMap2"
                 float2 var_FlowMap = tex2D(_FlowMap,i.uv).rg * 2 - 1 ;
                 var_FlowMap *= _FlowStrange;
                 
-                float noise  = tex2D(_FlowMap,i.uv).a;
+                float noise  = tex2D(_FlowMap,i.uv).a;//A通道中保存噪声
                 float time = _Time.y * _FlowSpeed + noise;
 
                 float2 jump = float2(_Jump1,_Jump2);
-                
+
+                //FlowMap UV 计算，flowmap的每个像素保存着一个移动方向，
+                //z分量保存当前权重值，权重值根据flow函数W(1) = W(0) = 0 ，W(1/2) = W(1/2) = 1计算
                 float3 uv1 = FlowUVW(i.uv,var_FlowMap,_Tiling,jump,time,true);
                 float3 uv2 = FlowUVW(i.uv,var_FlowMap,_Tiling,jump,time,false);
-
+                
+                //解码法线贴图
                 half3 var_Normal1 = UnpackNormalWithScale(tex2D(_NormalMap,uv1.xy),_NormalScale) * uv1.z;
                 half3 var_Normal2 = UnpackNormalWithScale(tex2D(_NormalMap,uv2.xy),_NormalScale) * uv2.z;
                 half3 NDir = normalize(var_Normal1+var_Normal2);
 
+                //光照计算部分
                 fixed NdotL = saturate(dot(NDir,LdirTS)) * 0.5f + 0.5f;
                 fixed3 halfWay = normalize(VdirTS+LdirTS);
                 fixed NdotH = saturate(dot(NDir,halfWay));
                 
                 half4 var_MainTex1 = tex2D(_MainTex,uv1.xy) * uv1.z;
                 half4 var_MainTex2 = tex2D(_MainTex,uv2.xy) * uv2.z;
-                
+
+                //叠加计算结果
                 fixed3 diffuse = (var_MainTex1.rgb+var_MainTex2.rgb) * _Color.rgb * NdotL;
                 fixed3 specular = _LightColor0.rgb * pow(NdotH,_Gloss); 
                 fixed3 finalColor = diffuse+specular;
