@@ -153,10 +153,6 @@ https://www.iflyrec.com/views/html/editor.html?id=PWmz2206281739A054F3D500008&au
 ## [卡通渲染(NPR)](https://github.com/corsair0909/UnityShader/tree/main/Assets/Shader/NPR).    
 <img width="1153" alt="截屏2022-07-11 21 53 32" src="https://user-images.githubusercontent.com/49482455/178281487-f8be6df2-68db-4432-98f4-07a7faef7f1e.png">
 
-
-<img width="1285" alt="截屏2022-07-11 16 08 18" src="https://user-images.githubusercontent.com/49482455/178283292-f51229fe-7e57-4e4d-8915-17a3b5957def.png">
-
-
 ### 实现思路    
 #### 描边     
 顶点沿法线方向外扩，并剔除正面得到描边（Bakc Faceing）
