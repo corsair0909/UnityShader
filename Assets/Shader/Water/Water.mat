@@ -36,16 +36,21 @@ Material:
     - _FlowOffset: 0.25
     - _FlowSpeed: 0.9
     - _FlowStrange: 0.05
+    - _FogDensity: 0.18
     - _Gloss: 90
     - _Jump1: 0.25
     - _Jump2: 0.25
-    - _NormalScale: 1.5
+    - _NormalScale: 0.49
+    - _RefractPower: 0.35
     - _Steepness: 1
     - _Tiling: 3
+    - _WaterAlpha: 1
+    - _WaterDepth: 20
     - _WaveLength: 10
-    - _WaveSpeed: 1.5
+    - _WaveSpeed: 2
     m_Colors:
-    - _Color: {r: 0.6463599, g: 0.7313922, b: 0.7830189, a: 1}
+    - _Color: {r: 0.26877892, g: 0.3773585, b: 0.36978316, a: 0.16470589}
+    - _FogColor: {r: 0.46263257, g: 0.74772, b: 1.8505303, a: 1}
     - _WaveA: {r: 1, g: 0, b: 0.1, a: 10}
     - _WaveB: {r: 0, g: 1, b: 0.1, a: 15}
     - _WaveC: {r: 1, g: 1, b: 0.1, a: 18}

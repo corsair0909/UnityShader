@@ -39,20 +39,36 @@ Shader "Unlit/Water"
         _WaveA("WaveA(dir,steepness,wavelength)",vector) = (1,1,0.5,50)
         _WaveB("WaveB",vector) = (0,1,0.25,20)
         _WaveC("WaveC",vector) = (1,1.3,0.25,18)
+        
+        [Space(15)]
+        [Header(AlphaParameter)]
+        _WaterAlpha("WaterAlpha",range(0,1)) = 1
+        _WaterDepth("WaterDepth",range(0,100)) = 20
+        [Space(5)]
+        [Header(FogParameter)]
+        [HDR]_FogColor("FogColor",color) = (1,1,1,1)
+        _FogDensity("FogDensity",range(0,1)) = 0
+        
+        [Header(RefractStranger)]
+        _RefractPower("RefractPower",range(0,1)) = 0
     }
     SubShader
     {
-        Tags { "RenderType"="Opaque" }
+        Tags { "RenderType"="Transparent" "Queue" = "Transparent" }
         LOD 100
+        
+        GrabPass {"_WaterBackground"}
 
         Pass
         {
+            //Blend One One
             CGPROGRAM
             #pragma vertex vert
             #pragma fragment frag
 
             #include "UnityCG.cginc"
             #include "Lighting.cginc"
+            #include "Assets/Shader/MyShaderLabs.cginc"
 
             struct appdata
             {
@@ -68,6 +84,7 @@ Shader "Unlit/Water"
                 float4 vertex : SV_POSITION;
                 float3 LdirTS : TEXCOORD1;
                 float3 VdirTS : TEXCOORD2;
+                float4 ScreenPos : TEXCOORD3;
             };
 
             sampler2D _MainTex;
@@ -83,6 +100,9 @@ Shader "Unlit/Water"
             fixed _WaveSpeed;//_Amplitude,_WaveLength,_Steepness;
             //fixed4 _WaveDirection;
             fixed4 _WaveA,_WaveB,_WaveC;
+
+            fixed _WaterAlpha,_WaterDepth;
+
 
             half4 _Color;
 
@@ -119,8 +139,10 @@ Shader "Unlit/Water"
                 wave.xyz +=WaveValue(_WaveB,wave);
                 wave.xyz +=WaveValue(_WaveC,wave);
                 WaveVertex = wave;
-                //将顶点动画计算过的顶点变换到裁剪空间下                
+                //将顶点动画计算过的顶点变换到裁剪空间下
                 o.vertex = UnityObjectToClipPos(WaveVertex);
+
+                o.ScreenPos = ComputeScreenPos(o.vertex);
                 
                 o.uv = TRANSFORM_TEX(v.uv, _MainTex);
                 TANGENT_SPACE_ROTATION;
@@ -187,10 +209,11 @@ Shader "Unlit/Water"
                 half4 var_MainTex2 = tex2D(_MainTex,uv2.xy) * uv2.z;
 
                 //叠加计算结果
-                fixed3 diffuse = (var_MainTex1.rgb+var_MainTex2.rgb) * _Color.rgb * NdotL;
-                fixed3 specular = _LightColor0.rgb * pow(NdotH,_Gloss); 
-                fixed3 finalColor = diffuse+specular;
-                return fixed4(finalColor,1);
+                fixed3 diffuse = (var_MainTex1.rgb+var_MainTex2.rgb)  * NdotL;
+                fixed3 specular = _LightColor0.rgb * pow(NdotH,_Gloss);
+                fixed3 emissive = ColorBlowWater(i.ScreenPos,NDir) * (1-_Color.a);
+                fixed3 finalColor = (diffuse+specular+emissive) *  _Color.rgb;
+                return fixed4(finalColor,_Color.a);
             }
             ENDCG
         }
