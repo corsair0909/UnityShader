@@ -157,7 +157,29 @@ https://www.iflyrec.com/views/html/editor.html?id=PWmz2206281739A054F3D500008&au
 <img width="1285" alt="截屏2022-07-11 16 08 18" src="https://user-images.githubusercontent.com/49482455/178283292-f51229fe-7e57-4e4d-8915-17a3b5957def.png">
 
 
-实现思路见代码注释，注意点较多
+### 实现思路    
+#### 描边     
+顶点沿法线方向外扩，并剔除正面得到描边（Bakc Faceing）
+##### 1、法线方向   
+描边相对于世界空间下不变，相机距离越近描边会变得越粗，将外扩的大小调整到NDC空间下消除影响
+UNITY_MATRIX_IT_MV 矩阵用于变化法线，将法线变换到View空间。    
+TransformViewToProjection（）方法将法线向量变换到投影空间。管线会自动进行透视除法（除以w分量），为了得到不受透视除法影响的法线向量，在变换到投影空间下后与w分量相乘用来抵消透视除法带来影响。
+##### 2、屏幕宽高比    
+NDC空间下的xy范围为[0-1],无法直接适配到16:9屏幕宽高比中，轮廓线的水平方向会变粗，所以需要重新计算屏幕宽高比     
+aspect = _ScreenParams.y/_ScreenParams.x；   
+##### 3、平均法线  
+MeshFilter组件包含了对网格的引用，MeshRender组件渲染MeshFilter组件引用的网格。 MeshFilter.Mesh属性包含了引用的网格的顶点中的数据，顶点数据类型为Vector3类型。通过字典数据结构保存每个顶点和顶点对应的法线，将共用顶点的法线进行Normalized。    
+[MeshFilter Unity手册](https://docs.unity.cn/cn/2020.3/ScriptReference/30_search.html?q=MeshFilter).   
+[Unity 平均法线工具](https://zhuanlan.zhihu.com/p/109101851)
+##### 4、Perlin Noise 不规则法线       
+Perlin Noise生成算法得到随机大小，记得使用NDC坐标（乘以变换后顶点的w分量）
+#### 光照计算。  
+##### 1、Ramp（渐变贴图采样）。   
+tex2D(_RampTex,float2(NdotL,0.5f))    
+##### 2、边缘光。   
+边缘光是以视线（V）向量和法线（N）向量的点积，视线和法线的夹角越大边缘光越亮。1减去点击部分得到剩余的部分。
+
+
 ### 参考链接。    
 [从零开始的卡通渲染](https://zhuanlan.zhihu.com/p/109101851).     
 [卡通渲染基本光照模型的实现](https://zhuanlan.zhihu.com/p/95986273).         
