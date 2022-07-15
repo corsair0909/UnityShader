@@ -1,4 +1,4 @@
-Shader "Unlit/FlowMap2"
+Shader "Unlit/Water"
 {
     Properties
     {
