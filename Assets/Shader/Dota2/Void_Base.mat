@@ -1,0 +1,106 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Void_Base
+  m_Shader: {fileID: 4800000, guid: ec8a82d08330b4574a4155d5e9c0b576, type: 3}
+  m_ShaderKeywords: 
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _CubeMap:
+        m_Texture: {fileID: 8900000, guid: 36ed4a2245bcd4275a7cd9883ca31669, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Detail:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DetailMaks:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MainTex:
+        m_Texture: {fileID: 2800000, guid: b8aa514b63694484282ef47ede408a76, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MetalnessMask:
+        m_Texture: {fileID: 2800000, guid: cc8c3d53ee79c4bcfa8c528255bb1348, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _NormalTex:
+        m_Texture: {fileID: 2800000, guid: a8f05c80a49574756b63c6776ce65606, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Rim:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _RimCol:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _RimMask:
+        m_Texture: {fileID: 2800000, guid: bf23b93cb559d48189be9aab1b4cb8f5, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Selfllum:
+        m_Texture: {fileID: 2800000, guid: f263f294fc47d4e7e95bd701f1d2b2e2, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SpecularExponent:
+        m_Texture: {fileID: 2800000, guid: 75359929c08a8440fbf68d7c9bb2c32e, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SpecularMask:
+        m_Texture: {fileID: 2800000, guid: be2b2ebd8bd404748985a40bb89b6302, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _TinyMask:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Translucency:
+        m_Texture: {fileID: 2800000, guid: f258dc84341ea4ce499ca670ce1d540f, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _WarpCol:
+        m_Texture: {fileID: 2800000, guid: 1e9bb622e333c4112810499a4d458da4, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _WarpRim:
+        m_Texture: {fileID: 2800000, guid: 7b6a8e12f862b4946b6d6a139c4d5c9b, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _WarpSpec:
+        m_Texture: {fileID: 2800000, guid: 98b6f6be0929c4927b66be15e42a6664, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Floats:
+    - _EnvDiffInt: 0.55
+    - _EnvInt: 0.51
+    - _Gloss: 50
+    - _NormalScale: 0.17
+    - _RimInt: 3
+    - _RimPower: 5
+    - _SelfInt: 1
+    - _SpecularInt: 0.22
+    m_Colors:
+    - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _EnvCol: {r: 0.36078432, g: 0.2509804, b: 0.5411765, a: 1}
+    - _RimColor: {r: 1, g: 0.8254717, b: 0.8254717, a: 1}
+    - _Spec: {r: 1, g: 1, b: 1, a: 1}
+    - _SpecularColor: {r: 0.19607845, g: 0.1137255, b: 0.34901962, a: 1}
+    - _Tint: {r: 1, g: 1, b: 1, a: 1}
+  m_BuildTextureStacks: []
