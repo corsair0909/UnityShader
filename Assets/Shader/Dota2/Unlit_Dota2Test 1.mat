@@ -1,0 +1,73 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Unlit_Dota2Test
+  m_Shader: {fileID: 4800000, guid: c20f33967df0843848b78c51e771c2fb, type: 3}
+  m_ShaderKeywords: 
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _ColorTex:
+        m_Texture: {fileID: 2800000, guid: 34e5d2973bea44a4eb3d5e452fa9cc8a, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _CubeMap:
+        m_Texture: {fileID: 8900000, guid: a7c2e75de688441c0bc3a2965d41a4f9, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MetalnessTex:
+        m_Texture: {fileID: 2800000, guid: 7ff0d038eb3f8436f9822aa5e955f3e5, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _NormalTex:
+        m_Texture: {fileID: 2800000, guid: fdb9f2808112a419481da96e024f8267, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _RimTex:
+        m_Texture: {fileID: 2800000, guid: 4b91b917085dd4cd485c5d3ee3157869, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SelfIllumTex:
+        m_Texture: {fileID: 2800000, guid: 0746fbc3d1709411ca0ca03ddbe5aec0, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SpeculerExpTex:
+        m_Texture: {fileID: 2800000, guid: cf28cbb6acec240e3af4a1698a9c0b22, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SpeculerTex:
+        m_Texture: {fileID: 2800000, guid: 86b60f93beccc4032b522d9992e51436, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _TintByBaseTex:
+        m_Texture: {fileID: 2800000, guid: f65a628700b184180beeefea3ff99e0b, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _TranslucencyTex:
+        m_Texture: {fileID: 2800000, guid: fb67a75c753d3494a81fb0ae71dfc5cf, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Floats:
+    - _Cube: 0
+    - _Cull: 2
+    - _Cutoff: 0.1
+    - _Metalness: 0
+    - _Rim: 0
+    - _SelfIllum: 0
+    - _Speculer: 0
+    m_Colors:
+    - _RimColor: {r: 1, g: 1, b: 1, a: 1}
+    - _Tint: {r: 1, g: 1, b: 1, a: 1}
+  m_BuildTextureStacks: []
