@@ -11,6 +11,7 @@ Shader "Unlit/Water"
         _MainTex ("MainTex", 2D) = "white" {}
         _FlowMap ("FlowMap", 2D) = "white" {}
         _NormalMap("Derivative",2D) = "White"{}
+        _FomaNoiseTex("FomaNoiseTex",2D) = "gray"{}
         
         [Space(5)]
         [Header(LightParameter)]
@@ -35,15 +36,10 @@ Shader "Unlit/Water"
         _WaveSpeed("WaveSpeed(波速度)",float) = 1
 //        _Steepness("Steepness",range(0,1)) = 0.5
 //        _WaveDirection("WaveDir(2D)",vector) = (1,0,0,0)
-        
         _WaveA("WaveA(dir,steepness,wavelength)",vector) = (1,1,0.5,50)
         _WaveB("WaveB",vector) = (0,1,0.25,20)
         _WaveC("WaveC",vector) = (1,1.3,0.25,18)
         
-        [Space(15)]
-        [Header(AlphaParameter)]
-        _WaterAlpha("WaterAlpha",range(0,1)) = 1
-        _WaterDepth("WaterDepth",range(0,100)) = 20
         [Space(5)]
         [Header(FogParameter)]
         [HDR]_FogColor("FogColor",color) = (1,1,1,1)
@@ -51,6 +47,13 @@ Shader "Unlit/Water"
         
         [Header(RefractStranger)]
         _RefractPower("RefractPower",range(0,1)) = 0
+        
+        [Speac(15)]
+        [Header(FomaParameter)]
+        _FomaCutOff ("FomaCutOff",float) = 0
+        [HDR]_FomaColor ("FomaColor",color) = (1,1,1,1)
+        _FomaMax("FomaMax",float) = 0.4
+        _FomaMin("FomaMim",float) = 0.04
     }
     SubShader
     {
@@ -70,6 +73,8 @@ Shader "Unlit/Water"
             #include "Lighting.cginc"
             #include "Assets/Shader/MyShaderLabs.cginc"
 
+            #define _AA 0.001
+
             struct appdata
             {
                 float4 vertex : POSITION;
@@ -85,12 +90,16 @@ Shader "Unlit/Water"
                 float3 LdirTS : TEXCOORD1;
                 float3 VdirTS : TEXCOORD2;
                 float4 ScreenPos : TEXCOORD3;
+                float3 viewNormal : NORMAL;
             };
 
             sampler2D _MainTex;
             float4 _MainTex_ST;
             sampler2D _FlowMap;
             sampler2D _NormalMap;
+            sampler2D _FomaNoiseTex;
+            sampler2D _CameraNormalsTexture;
+
             
             fixed _FlowStrange,_FlowSpeed,_FlowOffset;
             fixed _Jump1,_Jump2;
@@ -100,11 +109,11 @@ Shader "Unlit/Water"
             fixed _WaveSpeed;//_Amplitude,_WaveLength,_Steepness;
             //fixed4 _WaveDirection;
             fixed4 _WaveA,_WaveB,_WaveC;
+            
 
-            fixed _WaterAlpha,_WaterDepth;
+            fixed _FomaMax,_FomaMin,_FomaCutOff;
 
-
-            half4 _Color;
+            half4 _Color,_FomaColor;
 
             float3 WaveValue(float4 wave,float3 vertex)
             {
@@ -148,6 +157,9 @@ Shader "Unlit/Water"
                 TANGENT_SPACE_ROTATION;
                 o.LdirTS = mul(rotation,ObjSpaceLightDir(v.vertex));
                 o.VdirTS = mul(rotation,ObjSpaceViewDir(v.vertex));
+
+                o.viewNormal = COMPUTE_VIEW_NORMAL;//计算试图空间法线向量
+                
                 return o;
             }
 
@@ -170,6 +182,14 @@ Shader "Unlit/Water"
                 return UVW;
             }
 
+            float FomaLine(float4 ScreenPos,float noise)
+            {
+                
+                float LinearDepth = LinearEyeDepth(SAMPLE_DEPTH_TEXTURE_PROJ(_CameraDepthTexture,ScreenPos));
+                float Foma = 1- saturate(_FomaCutOff*(LinearDepth - ScreenPos.w));
+                Foma = smoothstep(Foma+0.0001,Foma-0.0001,noise);
+                return Foma;
+            }
             // float3 UnpackDerivativeMap(float4 var_DerivativeMap)
             // {
             //     float3 rgb = var_DerivativeMap.agb;
@@ -208,11 +228,17 @@ Shader "Unlit/Water"
                 half4 var_MainTex1 = tex2D(_MainTex,uv1.xy) * uv1.z;
                 half4 var_MainTex2 = tex2D(_MainTex,uv2.xy) * uv2.z;
 
+                fixed4 var_FomaNoiseTex = tex2D(_FomaNoiseTex,i.uv);
+                
+                
                 //叠加计算结果
                 fixed3 diffuse = (var_MainTex1.rgb+var_MainTex2.rgb)  * NdotL;
                 fixed3 specular = _LightColor0.rgb * pow(NdotH,_Gloss);
                 fixed3 emissive = ColorBlowWater(i.ScreenPos,NDir) * (1-_Color.a);
-                fixed3 finalColor = (diffuse+specular+emissive) *  _Color.rgb;
+                fixed3 FomaColor = FomaLine(i.ScreenPos,var_FomaNoiseTex.r) * _FomaColor.rgb * 0.5f;
+                fixed3 finalColor = (diffuse+specular+emissive+FomaColor) *  _Color.rgb;
+
+                
                 return fixed4(finalColor,_Color.a);
             }
             ENDCG

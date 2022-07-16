@@ -1,5 +1,7 @@
 # ifndef MySHADERLABS
     # define MySHADERLABS
+
+    
 //https://zhuanlan.zhihu.com/p/95986273 噪声生成算法来源
 float2 hash22(float2 p) {
     p = float2(dot(p, float2(127.1, 311.7)), dot(p, float2(269.5, 183.3)));
@@ -44,6 +46,7 @@ float3 ColorBlowWater(float4 ScreenPos,float3 NdirTS)
     //效果相同 ScreenPos的Z分量是插值出的裁剪空间深度 UNITY_Z_0_FAR_FROM_CLIPSPACE宏将其转换为线性深度
     //float TopDepth = UNITY_Z_0_FAR_FROM_CLIPSPACE(ScreenPos.z);
     float DepthDifference = BottmDepth - ScreenPos.w;
+    
     if (DepthDifference<0)//水面上的物体uv不发生折射
     {
         DepthPos = ScreenPos.xy/ScreenPos.w;
@@ -64,5 +67,8 @@ float3 ColorBlowWater(float4 ScreenPos,float3 NdirTS)
     
     //return DepthDifference/WaterDepth;
 }
+
+
+
 
 #endif

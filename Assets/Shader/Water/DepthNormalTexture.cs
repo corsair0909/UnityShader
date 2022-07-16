@@ -1,18 +1,24 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class DepthNormalTexture : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    [SerializeField]
+    DepthTextureMode _mode;
+    private void OnValidate()
     {
-        
+        SetCameraDepthTextureMode();
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Awake()
     {
-        
+        SetCameraDepthTextureMode();
+    }
+
+    private void SetCameraDepthTextureMode()
+    {
+        GetComponent<Camera>().depthTextureMode = _mode;
     }
 }
