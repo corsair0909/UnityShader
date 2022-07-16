@@ -52,7 +52,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _RimMask:
-        m_Texture: {fileID: 2800000, guid: f93ef8349bac640878628352a9fa0025, type: 3}
+        m_Texture: {fileID: 2800000, guid: 55b13fd77d06a4ba8b46f04f668316c0, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Selfllum:
@@ -64,7 +64,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _SpecularMask:
-        m_Texture: {fileID: 2800000, guid: 9de094123912c47169a362aa0482b5dd, type: 3}
+        m_Texture: {fileID: 2800000, guid: 74073c18dc4e54aa1a1c7ccd6b4363eb, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _TinyMask:
@@ -88,18 +88,20 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
+    - _CutOff: 0.1
     - _EnvDiffInt: 0.8
     - _EnvInt: 0.51
     - _Gloss: 50
     - _NormalScale: 0.17
-    - _RimInt: 3
-    - _RimPower: 5
+    - _RimInt: 3.81
+    - _RimPower: 4.59
     - _SelfInt: 1
-    - _SpecularInt: 0.22
+    - _SpecularInt: 3.36
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _EmissiveColor: {r: 1, g: 1, b: 1, a: 1}
     - _EnvCol: {r: 0.4156863, g: 0.454902, b: 0.57254905, a: 1}
-    - _RimColor: {r: 1, g: 0.8254717, b: 0.8254717, a: 1}
+    - _RimColor: {r: 1, g: 1, b: 1, a: 1}
     - _Spec: {r: 1, g: 1, b: 1, a: 1}
     - _SpecularColor: {r: 0.19607845, g: 0.1137255, b: 0.34901962, a: 1}
     - _Tint: {r: 1, g: 1, b: 1, a: 1}

@@ -88,19 +88,21 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
-    - _EnvDiffInt: 0.55
+    - _CutOff: 0.1
+    - _EnvDiffInt: 0.17
     - _EnvInt: 0.51
     - _Gloss: 50
     - _NormalScale: 0.17
     - _RimInt: 3
     - _RimPower: 5
     - _SelfInt: 1
-    - _SpecularInt: 0.22
+    - _SpecularInt: 0.2
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _EnvCol: {r: 0.36078432, g: 0.2509804, b: 0.5411765, a: 1}
+    - _EmissiveColor: {r: 1, g: 1, b: 1, a: 1}
+    - _EnvCol: {r: 0.7529412, g: 0.8039216, b: 0.99215686, a: 1}
     - _RimColor: {r: 1, g: 0.8254717, b: 0.8254717, a: 1}
     - _Spec: {r: 1, g: 1, b: 1, a: 1}
-    - _SpecularColor: {r: 0.19607845, g: 0.1137255, b: 0.34901962, a: 1}
+    - _SpecularColor: {r: 1, g: 0.8196079, b: 1, a: 1}
     - _Tint: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []

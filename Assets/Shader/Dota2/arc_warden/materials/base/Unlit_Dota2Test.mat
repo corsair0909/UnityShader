@@ -20,19 +20,19 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _ColorTex:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: 34e5d2973bea44a4eb3d5e452fa9cc8a, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _CubeMap:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 8900000, guid: 03631a1ce5e0b4e71a2b41958591bd5d, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetalnessTex:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: 7ff0d038eb3f8436f9822aa5e955f3e5, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _NormalTex:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: fdb9f2808112a419481da96e024f8267, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _RimTex:
@@ -40,7 +40,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _SelfIllumTex:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: 86b60f93beccc4032b522d9992e51436, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _SpeculerExpTex:
@@ -48,7 +48,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _SpeculerTex:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: 86b60f93beccc4032b522d9992e51436, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _TintByBaseTex:
@@ -60,12 +60,12 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
-    - _Cube: 0
+    - _Cube: 0.04
     - _Cull: 2
-    - _Cutoff: 0.1
-    - _Metalness: 0
+    - _Cutoff: 0.28
+    - _Metalness: 0.16
     - _Rim: 0
-    - _SelfIllum: 0
+    - _SelfIllum: 0.43
     - _Speculer: 0
     m_Colors:
     - _RimColor: {r: 1, g: 1, b: 1, a: 1}
