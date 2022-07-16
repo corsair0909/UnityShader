@@ -153,11 +153,37 @@ https://www.iflyrec.com/views/html/editor.html?id=PWmz2206281739A054F3D500008&au
 ## [卡通渲染(NPR)](https://github.com/corsair0909/UnityShader/tree/main/Assets/Shader/NPR).    
 <img width="1153" alt="截屏2022-07-11 21 53 32" src="https://user-images.githubusercontent.com/49482455/178281487-f8be6df2-68db-4432-98f4-07a7faef7f1e.png">
 
+### 实现思路    
+#### 描边     
+顶点沿法线方向外扩，并剔除正面得到描边（Bakc Faceing）
+##### 1、法线方向   
+描边相对于世界空间下不变，相机距离越近描边会变得越粗，将外扩的大小调整到NDC空间下消除影响
+UNITY_MATRIX_IT_MV 矩阵用于变化法线，将法线变换到View空间。    
+TransformViewToProjection（）方法将法线向量变换到投影空间。管线会自动进行透视除法（除以w分量），为了得到不受透视除法影响的法线向量，在变换到投影空间下后与w分量相乘用来抵消透视除法带来影响。
+##### 2、屏幕宽高比    
+NDC空间下的xy范围为[0-1],无法直接适配到16:9屏幕宽高比中，轮廓线的水平方向会变粗，所以需要重新计算屏幕宽高比     
+aspect = _ScreenParams.y/_ScreenParams.x；   
+##### 3、平均法线  
+MeshFilter组件包含了对网格的引用，MeshRender组件渲染MeshFilter组件引用的网格。 MeshFilter.Mesh属性包含了引用的网格的顶点中的数据，顶点数据类型为Vector3类型。通过字典数据结构保存每个顶点和顶点对应的法线，将共用顶点的法线进行Normalized。    
+[MeshFilter Unity手册](https://docs.unity.cn/cn/2020.3/ScriptReference/30_search.html?q=MeshFilter).   
+[Unity 平均法线工具](https://zhuanlan.zhihu.com/p/109101851)
+##### 4、Perlin Noise 不规则法线       
+Perlin Noise生成算法得到随机大小，记得使用NDC坐标（乘以变换后顶点的w分量）
+#### 光照计算。  
+##### 1、Ramp（渐变贴图采样）。   
+tex2D(_RampTex,float2(NdotL,0.5f))    
+##### 2、边缘光。   
+边缘光是以视线（V）向量和法线（N）向量的点积，视线和法线的夹角越大边缘光越亮。1减去点击部分得到剩余的部分。
+##### 3、二分色 ：二分色可以用来表示卡通渲染中皮革、漆面产生的另外的颜色部分    
+在高光公式的计算中将NdotH改为VdotN，大于阈值的部分在对高光颜色提亮（乘以指定的数乘）    
+##### 4、SDF面部阴影。   
+SDF面部阴影贴图中有光照的部分只有一侧，当光照方向转动到另一侧时需要反转uv的水平方向再次采样视线阴影平滑过渡。
+指定觉得的正前方和侧方向量，正前方与光照方向的夹角表示光照结果的阈值，点积结果需要映射到[0,1]范围内。    
+侧方向和灯光方向的夹角的正负决定使用那一侧的光照方向。   
+isShadow：step函数将光照计算结果限制在一侧的阴影中    
+Bias：光照结果和阴影结果的差做smoothness平滑过渡。   
+阴影和非阴影部分的过渡使用，根据bias的结果在有光照和无光照的面部颜色之间插值过渡
 
-<img width="1285" alt="截屏2022-07-11 16 08 18" src="https://user-images.githubusercontent.com/49482455/178283292-f51229fe-7e57-4e4d-8915-17a3b5957def.png">
-
-
-实现思路见代码注释，注意点较多
 ### 参考链接。    
 [从零开始的卡通渲染](https://zhuanlan.zhihu.com/p/109101851).     
 [卡通渲染基本光照模型的实现](https://zhuanlan.zhihu.com/p/95986273).         
