@@ -24,12 +24,30 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _PainNoiseTex:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: be4d3d6a8a17346c2b7d93e3ead33f56, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Painting:
+        m_Texture: {fileID: 2800000, guid: f8c3da39da6e2430cb4cf3a4b339679d, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _PaintingNoise:
+        m_Texture: {fileID: 2800000, guid: be4d3d6a8a17346c2b7d93e3ead33f56, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _RampTex:
+        m_Texture: {fileID: 2800000, guid: 4e8f1fbb80e0a41a5af46bf4cd3692fa, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
-    - _LineColor: 0.1
-    - _LineWidth: 0.1
-    - _NoiseWidth: 0.1
-    m_Colors: []
+    - _LineColor: 0.22
+    - _LineWidth: 0.38
+    - _NoiseWidth: 0.21
+    - _OutsideNoiseWidth: 0.48
+    - _PaintCutOut: 0.19
+    - _PaintWidth: 0.25
+    - _Resolution: 6.07
+    - _radius: 2.55
+    m_Colors:
+    - _LineColor: {r: 0.1509434, g: 0.1509434, b: 0.1509434, a: 1}
   m_BuildTextureStacks: []
