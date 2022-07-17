@@ -112,12 +112,11 @@ Shader "Unlit/ChinesePainting"
                 fixed3 LdirWS = normalize(UnityWorldSpaceLightDir(i.WorldPos.xyz));
                 fixed HalfNdotL = saturate(dot(NdirWS,LdirWS)) * 0.5f + 0.5f;
                 float2 NoiseUV = float2(HalfNdotL,HalfNdotL);
-                float2 Noise = tex2D(_PaintingNoise,i.uv).xy;
+                float4 Noise = tex2D(_PaintingNoise,i.uv);
                 float2 curUV = NoiseUV + (Noise * _PaintWidth);
                 curUV = clamp(curUV,0,1);
                 
                 return tex2D(_RampTex,curUV);
-                
                 // sum += tex2D(_RampTex,float2(curUV.x - 4 * weightVal,curUV.y - 4 * weightVal));
                 // sum += tex2D(_RampTex,float2(curUV.x - 3 * weightVal,curUV.y - 3 * weightVal));
                 // sum += tex2D(_RampTex,float2(curUV.x - 2 * weightVal,curUV.y - 2 * weightVal));
