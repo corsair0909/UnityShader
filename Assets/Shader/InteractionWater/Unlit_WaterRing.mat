@@ -20,9 +20,9 @@ Material:
     serializedVersion: 3
     m_TexEnvs: []
     m_Floats:
-    - _BumpPower: 2
-    - _RingRange: 0
-    - _RingSmoothness: 0
-    - _RingWidth: 0
+    - _BumpPower: 18.3
+    - _RingRange: 0.81
+    - _RingSmoothness: 0.0375
+    - _RingWidth: 0.058
     m_Colors: []
   m_BuildTextureStacks: []

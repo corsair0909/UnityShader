@@ -45,6 +45,7 @@ Shader "Unlit/Disslove"
             fixed4 _DissloveNode;
             fixed4 _DissloveDir;
             fixed _DissloveScale;
+            
 
             v2f vert (appdata v)
             {
@@ -86,7 +87,7 @@ Shader "Unlit/Disslove"
             {
                 //float4 Linecol = DefaultDisslove(i);
                 DirDisslove(i);
-                float4 Col = tex2D(_MainTex,i.uv);
+                fixed4 Col =  tex2D(_MainTex,i.uv);
                 return Col;
             }
             ENDCG

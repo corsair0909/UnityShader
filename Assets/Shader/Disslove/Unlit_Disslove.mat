@@ -30,7 +30,7 @@ Material:
     m_Floats:
     - _DissloveScale: 0.53
     - _EdgeWidth: 0.21
-    - _Thrshold: 0
+    - _Thrshold: 10.680055
     m_Colors:
     - _DissloveDir: {r: 1, g: 1, b: 0, a: 0}
     - _DissloveNode: {r: 1.5, g: 0, b: 0, a: 0}

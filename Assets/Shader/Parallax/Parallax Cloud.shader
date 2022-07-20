@@ -5,7 +5,7 @@ Shader "Unlit/ParallaxCloud"
         _Color ("Color",color) = (1,1,1,1)
         _MainTex ("Texture", 2D) = "white" {}
         _NormalMap ("Normal" ,2D) = "white" {}
-        _BumpScale ("HeightScale",range(0.2,3)) = 0.2
+        _BumpScale ("BumpScale",range(0.2,3)) = 0.2
         _Alpha ("Alpha",range(0,1)) = 0.2
         _StepLayer ("StepLayer",Range(1,100))= 1
         

@@ -27,14 +27,32 @@ Material:
         m_Texture: {fileID: 2800000, guid: aa701e5be2dbcd24aad4fb9c3ca284da, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _NormalTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _RingTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SkyboxTex:
+        m_Texture: {fileID: 8900000, guid: 8a293ce833d584fc98516e0e74f495a4, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _WaveMap:
         m_Texture: {fileID: 2800000, guid: f805e88d3eaf0f046ac4ed03de5c7c3e, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
-    - _Distortion: 10
-    - _WaveXSpeed: 0.01
-    - _WaveYSpeed: 0.01
+    - _DepthMaxDistance: 3.27
+    - _Distortion: 100
+    - _FresnelPower: 0
+    - _RingPower: 10
+    - _WaveScale: 0.73
+    - _WaveXSpeed: 0.07
+    - _WaveYSpeed: 0.05
     m_Colors:
-    - _Color: {r: 0, g: 0.15, b: 0.115, a: 1}
+    - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _DeepColor: {r: 1, g: 1, b: 1, a: 0.749}
+    - _ShallowColor: {r: 0.629984, g: 0.8585757, b: 0.9339623, a: 0.725}
   m_BuildTextureStacks: []

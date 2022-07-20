@@ -19,6 +19,10 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
+    - _NoiseTex:
+        m_Texture: {fileID: 2800000, guid: be4d3d6a8a17346c2b7d93e3ead33f56, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _PolyArtAlbedo:
         m_Texture: {fileID: 2800000, guid: 4960428282afaef44ab798134d3c2db0, type: 3}
         m_Scale: {x: 1, y: 1}
@@ -36,13 +40,20 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
+    - _DissloveScale: 0.005
+    - _EdgeWidth: 0.1
     - _Float1: 0
+    - _MaskID: 0
     - _Metal: 0
     - _Metallic: 0.3
     - _Sm: 0
     - _Smoothness: 0
+    - _Thrshold: 0
     - __dirty: 0
     m_Colors:
+    - _DissloveDir: {r: 0, g: 0, b: 0, a: 0}
+    - _DissloveNode: {r: 0, g: 0, b: 0, a: 0}
     - _Hair: {r: 0.63235295, g: 0.047971603, b: 0.009299317, a: 0}
     - _InnerCloth: {r: 0.50735295, g: 0.45260414, b: 0.01119162, a: 0}
     - _OuterChlothes: {r: 0.024816178, g: 0.375, b: 0.07070238, a: 0}
+  m_BuildTextureStacks: []

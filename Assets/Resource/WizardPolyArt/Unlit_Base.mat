@@ -20,12 +20,29 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _MainTex:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: 367fb8c3e96202542b61122c3b392cc6, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MainTexMask:
+        m_Texture: {fileID: 2800000, guid: c47c9719298650c47a7f2042127ff9d8, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _NoiseTex:
+        m_Texture: {fileID: 2800000, guid: be4d3d6a8a17346c2b7d93e3ead33f56, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
-    - _Gloss: 50
+    - _DissloveScale: 1
+    - _EdgeWidth: 0.03
+    - _Gloss: 90
+    - _Thrshold: -0.41999775
     m_Colors:
-    - _Spec: {r: 1, g: 1, b: 1, a: 1}
+    - _DissloveDir: {r: 0, g: -1, b: 0, a: 0}
+    - _DissloveNode: {r: 1.5, g: 0, b: 0, a: 0}
+    - _EdgeColor: {r: 0.13333334, g: 1.882353, b: 2, a: 1}
+    - _Hair: {r: 0.721568, g: 0.19339621, b: 1, a: 0}
+    - _InnerCloth: {r: 0.28235292, g: 0.67818207, b: 1, a: 1}
+    - _OuterChlothes: {r: 0.0047169924, g: 0.92297673, b: 1, a: 0}
+    - _Spec: {r: 1, g: 0.8726415, b: 0.8726415, a: 1}
     - _Tint: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []

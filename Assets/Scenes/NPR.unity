@@ -353,9 +353,9 @@ Light:
     m_Type: 2
     m_Resolution: 3
     m_CustomResolution: -1
-    m_Strength: 0.36
-    m_Bias: 0.21
-    m_NormalBias: 1.09
+    m_Strength: 0.38
+    m_Bias: 0.27
+    m_NormalBias: 0
     m_NearPlane: 0.1
     m_CullingMatrixOverride:
       e00: 1
@@ -401,13 +401,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 483842520}
-  m_LocalRotation: {x: -0.43544742, y: 0.74370456, z: -0.3057052, w: -0.4047634}
+  m_LocalRotation: {x: -0.12967405, y: 0.8273898, z: -0.51600075, w: 0.17987218}
   m_LocalPosition: {x: 0, y: 2.785, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 53.825, y: -1225.325, z: -42.69}
+  m_LocalEulerAnglesHint: {x: 53.825, y: -1306.97, z: -42.69}
 --- !u!1 &969660003
 GameObject:
   m_ObjectHideFlags: 0
@@ -582,7 +582,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1248142835}
   m_LocalRotation: {x: 0.023230555, y: -0.9528561, z: 0.075647645, w: 0.29292133}
-  m_LocalPosition: {x: -1.03, y: 2.0586185, z: 1.38}
+  m_LocalPosition: {x: -0.5, y: 2.0586185, z: 2.04}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -600,19 +600,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 796af2c4130254d47b1f1db743a13aa8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Shader: {fileID: 4800000, guid: a4fca94cc5d2f41dab4db1bb4144d33a, type: 3}
-  material: {fileID: 1634058751}
-  interation: 1
-  downSample: 1
-  Threshold: 0.36
-  blurSpread: 0.62
-  color:
-    r: 1
-    g: 1
-    b: 1
-    a: 1
-  BloomFractor: 3.45
-  lum: 1.2
 --- !u!1001 &1624983711
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -726,32 +713,6 @@ PrefabInstance:
       objectReference: {fileID: 9100000, guid: 75d3a58b3d7879f41926561701407a48, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7ca881dc797274619993c047a08268c8, type: 3}
---- !u!21 &1634058751
-Material:
-  serializedVersion: 6
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: Unlit/Bloom
-  m_Shader: {fileID: 4800000, guid: a4fca94cc5d2f41dab4db1bb4144d33a, type: 3}
-  m_ShaderKeywords: 
-  m_LightmapFlags: 4
-  m_EnableInstancingVariants: 0
-  m_DoubleSidedGI: 0
-  m_CustomRenderQueue: -1
-  stringTagMap: {}
-  disabledShaderPasses: []
-  m_SavedProperties:
-    serializedVersion: 3
-    m_TexEnvs:
-    - _MainTex:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    m_Floats: []
-    m_Colors: []
-  m_BuildTextureStacks: []
 --- !u!1 &5952617691154381
 GameObject:
   m_ObjectHideFlags: 0

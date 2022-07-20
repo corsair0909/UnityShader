@@ -6,6 +6,7 @@ Shader "Unlit/Base"
         _Tint ("Color",color) = (1,1,1,1)
         _Spec ("SpecColor",color) = (1,1,1,1)
         _Gloss("Gloss",range(30,90)) = 50
+        
 
     }
     SubShader
@@ -46,7 +47,7 @@ Shader "Unlit/Base"
                 o.WorldPos = mul(unity_ObjectToWorld,v.vertex);
                 return o;
             }
-
+            
             fixed4 frag (v2f i) : SV_Target
             {
                 fixed3 worldNormal = normalize(i.NDirWS);
@@ -56,10 +57,14 @@ Shader "Unlit/Base"
                 fixed3 halfDir = normalize(viewDir+LightDir);
                 fixed NdotL =  saturate(dot(LightDir,worldNormal));
                 fixed NdotH = saturate(dot(halfDir,worldNormal));
+
+                  fixed4 var_MainTex = tex2D(_MainTex,i.uv);
                 
                 fixed3 ambient = UNITY_LIGHTMODEL_AMBIENT.xyz * _Tint.rgb;
-                fixed3 diffuse = _LightColor0.xyz * _Tint.rgb * NdotL;
-                fixed3 specualr = _LightColor0.xyz * pow(NdotH,_Gloss);
+                fixed3 diffuse = _LightColor0.xyz * _Tint.rgb * NdotL * var_MainTex.rgb;
+                fixed3 specualr = _LightColor0.xyz * pow(NdotH,_Gloss) * _Spec.rgb;
+
+              
                 return fixed4(ambient+diffuse+specualr,1.0);
             }
             ENDCG

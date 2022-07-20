@@ -42,8 +42,8 @@ Material:
     m_Floats:
     - _Amplitude: 1
     - _FlowOffset: 0.25
-    - _FlowSpeed: 0.9
-    - _FlowStrange: 0.05
+    - _FlowSpeed: 1.93
+    - _FlowStrange: 0.04
     - _FogDensity: 0.13
     - _FomaCutOff: 5
     - _FomaMax: 0.08
@@ -57,15 +57,15 @@ Material:
     - _NormalScale: 0.7
     - _RefractPower: 0.2
     - _Steepness: 1
-    - _Tiling: 3
+    - _Tiling: 4.4
     - _WaterAlpha: 1
     - _WaterDepth: 20
     - _WaveLength: 10
-    - _WaveSpeed: 3
+    - _WaveSpeed: 0.5
     m_Colors:
     - _Color: {r: 0.36952654, g: 0.4528302, b: 0.44665956, a: 0}
-    - _FogColor: {r: 0.25516307, g: 0.5026038, b: 1.1886865, a: 1}
-    - _FomaColor: {r: 0.6401299, g: 0.990566, b: 0.88459927, a: 1}
+    - _FogColor: {r: 0.4691337, g: 0.707342, b: 1.3624158, a: 1}
+    - _FomaColor: {r: 3.3630846, g: 1.8885609, b: 1.8560418, a: 1}
     - _WaveA: {r: 1, g: 0, b: 0.1, a: 10}
     - _WaveB: {r: 0, g: 1, b: 0.1, a: 15}
     - _WaveC: {r: 1, g: 1, b: 0.1, a: 18}

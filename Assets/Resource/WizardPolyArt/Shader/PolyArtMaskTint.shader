@@ -32,6 +32,7 @@ Shader "PolyArtMaskTint"
 		struct Input
 		{
 			float2 uv_texcoord;
+			float3 worldPos;
 		};
 
 		uniform sampler2D _PolyArtAlbedo;
@@ -43,6 +44,15 @@ Shader "PolyArtMaskTint"
 		uniform float4 _Hair;
 		uniform float _Metallic;
 		uniform float _Smoothness;
+
+		uniform sampler2D _NoiseTex;
+		uniform float _Thrshold;
+		uniform float _EdgeWidth;
+		uniform float4 _DissloveNode;
+		uniform float4 _DissloveDir;
+		uniform float _DissloveScale;
+		
+
 
 		void surf( Input i , inout SurfaceOutputStandard o )
 		{

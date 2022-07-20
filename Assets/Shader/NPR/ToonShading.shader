@@ -139,7 +139,7 @@ Shader "Unlit/ToonShader"
                 float2 Left = normalize(mul(unity_ObjectToWorld,float3(1, 0, 0))).xy;   //世界空间角色正左侧方向向量
                 float2 Front = normalize(mul(unity_ObjectToWorld,float3(0, 0, 1))).xy; //世界空间角色正前方向向量
                 float ctrl = 1-clamp(0,1,dot(Front,LightDir)*0.5f+0.5f);//前方和光方向的点击结果为阈值，ctrl=0无光照
-                float ilm = dot(LightDir, Left) > 0 ? var_face1.r : var_face2.r;
+                float ilm = dot(LightDir, Left) > 0 ?  var_face2.r:var_face1.r;
                 float isSahdow = step(ilm, ctrl);//获取大于阈值的部分，在阴影的部分
                 fixed bias = smoothstep(0, _LerpMax, abs(ctrl - ilm));//平滑边界
                 

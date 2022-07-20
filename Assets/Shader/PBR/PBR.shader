@@ -7,6 +7,7 @@ Shader "Unlit/PBR"
         _NormalTex ("Normal",2D) = "white"{}
         _AO ("AO",2D) = "white"{} 
         _MetallicTex ("Metallic",2D) = "white"{}
+        //_Metal("Metal",range(0,1)) = 0 
         _LUT ("LUT",2D) = "white"{}
         _Roughness ("Roughness",range(0,1)) = 0.2
         _BumpScale ("BumpScale",range(0,1)) = 0
