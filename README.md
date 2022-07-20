@@ -191,4 +191,10 @@ Bias：光照结果和阴影结果的差做smoothness平滑过渡。
 [Unity着色器《原神》面部平滑阴影解决思路](https://zhuanlan.zhihu.com/p/402037562).     
 [原神角色渲染Shader分析还原](https://zhuanlan.zhihu.com/p/360229590).       
 [神作面部阴影渲染还原](https://zhuanlan.zhihu.com/p/279334552).      
-[二次元角色卡通渲染—面部篇](https://zhuanlan.zhihu.com/p/411188212).     
+[二次元角色卡通渲染—面部篇](https://zhuanlan.zhihu.com/p/411188212).    
+
+## [FlowMap水面](https://github.com/corsair0909/UnityShader/tree/main/Assets/Shader/FlowMap).    
+![QQ20220716-152941-HD](https://user-images.githubusercontent.com/49482455/179894389-1a087dae-677a-4bf0-917f-6002c8bf238f.gif)
+### FlowMap    
+FlowMap中的每个像素保存着一个向量，指向当前像素该运动到的方向，向量值域[0-1]需要映射到颜色值域[-1,1].     
+FlowMap采样周期函数，通过FlowMap贴图对UV偏移量构造相差半个周期的函数来避免扰动uv时出现的断层情况
