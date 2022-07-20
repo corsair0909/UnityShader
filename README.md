@@ -199,4 +199,20 @@ Bias：光照结果和阴影结果的差做smoothness平滑过渡。
 FlowMap中的每个像素保存着一个向量，指向当前像素该运动到的方向，向量值域[0-1]需要映射到颜色值域[-1,1].     
 FlowMap采样周期函数，通过FlowMap贴图对UV偏移量构造相差半个周期的函数来避免扰动uv时出现的断层情况        
 根据水面深度和水下深度的差计算水面边缘、水下能见度模拟。    
-使用法线贴图对水下物体进行折射扭曲，水下深度-表面深度<0说明在水面上方，不需要发生折射
+使用法线贴图对水下物体进行折射扭曲，水下深度-表面深度<0说明在水面上方，不需要发生折射。    
+### 参考链接    
+[Unity 水、流体、波纹基础系列](https://mp.weixin.qq.com/s/k8kPxMc8uB3T7eCYsdopGg)    
+[Toon Water Shader](https://roystan.net/articles/toon-water.html)    
+[UnityShader·水面](https://zhuanlan.zhihu.com/p/144818695)     
+
+## [Dota2角色](https://github.com/corsair0909/UnityShader/tree/main/Assets/Shader/Dota2).    
+<img width="1285" alt="截屏2022-07-17 01 46 20" src="https://user-images.githubusercontent.com/49482455/179896446-59f3a5e3-17d9-4722-bf80-7f4ada3610d3.png">    
+Dota2角色中使用非常多的遮罩贴图，此处不一一说明，参考链接中有多各个贴图的详细介绍   
+
+
+### 参考链接
+[Dota2角色渲染，用unity重现其shader](https://zhuanlan.zhihu.com/p/267361085).       
+[Mask的艺术 – 近似PBR的Dota2角色渲染](https://zhuanlan.zhihu.com/p/27254617)      
+[在Unity中复刻基于PBS的Dota2着色器](http://gypsumlabs.github.io/2017/03/28/unity-dota2-shader/)    
+[Steam创意工坊](https://help.steampowered.com/zh-cn/faqs/view/299C-D7F9-09A5-98B6#source1).     
+[庄懂ap-12](https://www.bilibili.com/video/BV1DQ4y1P7wG?spm_id_from=333.999.0.0)
