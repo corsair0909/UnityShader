@@ -215,4 +215,5 @@ Dota2角色中使用非常多的遮罩贴图，此处不一一说明，参考链
 [Mask的艺术 – 近似PBR的Dota2角色渲染](https://zhuanlan.zhihu.com/p/27254617)      
 [在Unity中复刻基于PBS的Dota2着色器](http://gypsumlabs.github.io/2017/03/28/unity-dota2-shader/)    
 [Steam创意工坊](https://help.steampowered.com/zh-cn/faqs/view/299C-D7F9-09A5-98B6#source1).     
-[庄懂ap-12](https://www.bilibili.com/video/BV1DQ4y1P7wG?spm_id_from=333.999.0.0)
+[庄懂ap-12](https://www.bilibili.com/video/BV1DQ4y1P7wG?spm_id_from=333.999.0.0)。    
+
