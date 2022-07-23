@@ -217,3 +217,11 @@ Dota2角色中使用非常多的遮罩贴图，此处不一一说明，参考链
 [Steam创意工坊](https://help.steampowered.com/zh-cn/faqs/view/299C-D7F9-09A5-98B6#source1).     
 [庄懂ap-12](https://www.bilibili.com/video/BV1DQ4y1P7wG?spm_id_from=333.999.0.0)。    
 
+## [水墨画模仿（简易版）](https://github.com/corsair0909/UnityShader/tree/main/Assets/Shader/WashPainting).   
+<img width="1285" alt="截屏2022-07-17 15 59 31" src="https://user-images.githubusercontent.com/49482455/179907255-e0dc55bd-0113-4f4b-a523-cdff899214dd.png">
+
+
+### 实现思路    
+
+
+大体想法使用毛笔的笔触和噪音来干扰RampTex的色阶效果
