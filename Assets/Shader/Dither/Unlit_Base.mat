@@ -24,10 +24,11 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
-    - _DitherSize: 0
+    - _AlphaScale: 0.73
+    - _DitherSize: 100
     - _DitherThreshold: 0
     - _Gloss: 50
     m_Colors:
     - _Spec: {r: 1, g: 1, b: 1, a: 1}
-    - _Tint: {r: 1, g: 1, b: 1, a: 1}
+    - _Tint: {r: 1, g: 0.74645275, b: 0.3537736, a: 1}
   m_BuildTextureStacks: []

@@ -83,5 +83,17 @@ float DecodeHeight(float4 rgba) {
     return lerp(h2, h1, c);
 }
 
+void Dither (float In,float4 ScrPos,out fixed ditherResult)
+{
+    float2 uv = ScrPos.xy * _ScreenParams.xy;
+    //修改外部传递的矩阵可以得到不同的dither效果
+    float DitherMatrix[16] = { 1.0 / 17.0,  9.0 / 17.0,  3.0 / 17.0, 11.0 / 17.0,
+    13.0 / 17.0,  5.0 / 17.0, 15.0 / 17.0,  7.0 / 17.0,
+    4.0 / 17.0, 12.0 / 17.0,  2.0 / 17.0, 10.0 / 17.0,
+    16.0 / 17.0,  8.0 / 17.0, 14.0 / 17.0,  6.0 / 17.0};
+    float index = uint(fmod(uv.x,4)*4+ uint(fmod(uv.y,4)));
+    ditherResult =In - DitherMatrix[index];
+}
+
 
 #endif
