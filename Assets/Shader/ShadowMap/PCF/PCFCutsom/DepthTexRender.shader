@@ -12,6 +12,8 @@ Shader "Unlit/DepthTexRender"
         Pass {
             Fog { Mode Off }
             Cull front
+            ZWrite On
+            ZTest Always
 
             CGPROGRAM
             #pragma vertex vert
@@ -30,7 +32,6 @@ Shader "Unlit/DepthTexRender"
             {
                 v2f o;
                 o.pos = UnityObjectToClipPos(v.vertex);
-                o.pos.z += _ShadowBias;
                 o.depth = o.pos.zw;
 
                 return o;

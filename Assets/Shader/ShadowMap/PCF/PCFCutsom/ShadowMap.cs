@@ -33,27 +33,27 @@ public class ShadowMap : MonoBehaviour
     /// </summary>
     private void InitDirLightCamera()
     {
-        GameObject go = new GameObject("DirCamera");
-        Camera lightCam = go.AddComponent<Camera>();
-        lightCam.transform.SetParent(lDirLight.transform);
+        // GameObject go = new GameObject("DirCamera");
+        // Camera lightCam = go.AddComponent<Camera>();
+        // ldirCamera.transform.SetParent(lDirLight.transform);
         //设置相机的视角和灯光相同
-        lightCam.transform.localPosition = new Vector3(0, 0, 0);
-        lightCam.transform.localRotation = new Quaternion(0, 0, 0,0);
+        // ldirCamera.transform.localPosition = new Vector3(0, 0, 0);
+        // ldirCamera.transform.localRotation = new Quaternion(0, 0, 0,0);
         
-        lightCam.clearFlags = CameraClearFlags.SolidColor;
+        ldirCamera.clearFlags = CameraClearFlags.SolidColor;
         
         //背景色设置为白色，表示无限远，为了确保深度对比不出问题
-        lightCam.backgroundColor = Color.white;
+        ldirCamera.backgroundColor = Color.white;
         
         //设置为正交透视，模拟方向光平行且无限远的照射方式
-        lightCam.orthographic = true;
+        ldirCamera.orthographic = true;
         
-        lightCam.nearClipPlane = 0.3f;
-        lightCam.farClipPlane = 200;
-        lightCam.allowMSAA = false;
-        lightCam.allowHDR = false;
-        lightCam.cullingMask = 1 << LayerMask.NameToLayer("ShadowCaster");
-        ldirCamera = lightCam;
+        ldirCamera.nearClipPlane = 0.3f;
+        ldirCamera.farClipPlane = 200;
+        ldirCamera.allowMSAA = false;
+        ldirCamera.allowHDR = false;
+        ldirCamera.cullingMask = 1 << LayerMask.NameToLayer("ShadowCaster");
+        //ldirCamera = lightCam;
     }
     private RenderTexture creatTexture(int resulotion)
     {

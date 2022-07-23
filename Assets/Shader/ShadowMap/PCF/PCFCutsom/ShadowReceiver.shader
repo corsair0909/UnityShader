@@ -39,6 +39,7 @@ Shader "Unlit/ShadowReceiver"
             fixed _CutOff;
             fixed4x4 _gWorldToLdirCameraMatrix;
             fixed _ShadowBias;
+            sampler2D _CameraDepthTexture;
             
             v2f vert (appdata_tan v)
             {
@@ -62,7 +63,7 @@ Shader "Unlit/ShadowReceiver"
                     {
                         half4 Col = tex2D(_gShadowMapTexture,uv+float2(i,j) * _gShadowMapTexture_TexelSize.xy);
                         fixed sampleDepth = DecodeFloatRGBA(Col);
-                        shadow += (sampleDepth) < depth ? 1-_ShadowStrange:1;
+                        shadow += (sampleDepth-_ShadowBias) < depth ? 1-_ShadowStrange:1;
                     }
                 }
                 return shadow/=9;
@@ -70,32 +71,33 @@ Shader "Unlit/ShadowReceiver"
             
             fixed4 frag (v2f i) : SV_Target
             {
-                fixed3 worldNormal = normalize(i.NDirWS);
-                float3 LightDir = normalize(_WorldSpaceLightPos0.xyz);
-                fixed3 viewDir = normalize(UnityWorldSpaceViewDir(i.WorldPos));
-                
-                fixed3 halfDir = normalize(viewDir+LightDir);
-                fixed NdotL =  saturate(dot(LightDir,worldNormal));
-                fixed NdotH = saturate(dot(halfDir,worldNormal));
-
-                  fixed4 var_MainTex = tex2D(_MainTex,i.uv);
-                
-                fixed3 ambient = UNITY_LIGHTMODEL_AMBIENT.xyz * _Tint.rgb;
-                fixed3 diffuse = _LightColor0.xyz * _Tint.rgb * NdotL * var_MainTex.rgb;
-                fixed3 specualr = _LightColor0.xyz * pow(NdotH,_Gloss) * _Spec.rgb;
+                // fixed3 worldNormal = normalize(i.NDirWS);
+                // float3 LightDir = normalize(_WorldSpaceLightPos0.xyz);
+                // fixed3 viewDir = normalize(UnityWorldSpaceViewDir(i.WorldPos));
+                //
+                // fixed3 halfDir = normalize(viewDir+LightDir);
+                // fixed NdotL =  saturate(dot(LightDir,worldNormal));
+                // fixed NdotH = saturate(dot(halfDir,worldNormal));
+                //
+                //   fixed4 var_MainTex = tex2D(_MainTex,i.uv);
+                //
+                // fixed3 ambient = UNITY_LIGHTMODEL_AMBIENT.xyz * _Tint.rgb;
+                // fixed3 diffuse = _LightColor0.xyz * _Tint.rgb * NdotL * var_MainTex.rgb;
+                // fixed3 specualr = _LightColor0.xyz * pow(NdotH,_Gloss) * _Spec.rgb;
 
                 float depth = i.DepthTexcoord.z / i.DepthTexcoord.w;
                 float2 depthUV = i.DepthTexcoord.xy/i.DepthTexcoord.w;
-                // depthUV = depthUV * 0.5 + 0.5;
-                //
-                // #if defined(SHADER_TARGET_GLSL)
-                //     depth = depth*0.5 + 0.5;    //(-1,1) → (0,1)
-                // #elif defined(UNITY_REVERSED_Z)
-                //     depth = 1 - depth;      //(1,0) → (0,1)
-                // #endif
-                //
-                float shadow = PCFShadow(depth,depthUV);
-                return fixed4((ambient+diffuse+specualr) * shadow,1.0);
+                depthUV = depthUV * 0.5 + 0.5;
+                
+                #if defined(SHADER_TARGET_GLSL)
+                    depth = depth*0.5 + 0.5;    //(-1,1) → (0,1)
+                #elif defined(UNITY_REVERSED_Z)
+                    depth = 1 - depth;      //(1,0) → (0,1)
+                #endif
+                
+                fixed shadow = PCFShadow(depth,depthUV);
+                return shadow;
+                //return fixed4((ambient+diffuse+specualr) * shadow,1.0);
             }
             ENDCG
         }
