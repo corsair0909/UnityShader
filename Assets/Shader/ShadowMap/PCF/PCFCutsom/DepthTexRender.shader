@@ -40,12 +40,13 @@ Shader "Unlit/DepthTexRender"
             fixed4 frag (v2f i) : COLOR
             {
                 float depth = i.depth.x/i.depth.y;
-            #if defined (SHADER_TARGET_GLSL) 
-                depth = depth*0.5 + 0.5; //(-1, 1)-->(0, 1)
-            #elif defined (UNITY_REVERSED_Z)
-                depth = 1 - depth;       //(1, 0)-->(0, 1)
-            #endif
+            // #if defined (SHADER_TARGET_GLSL) 
+            //     depth = depth*0.5 + 0.5; //(-1, 1)-->(0, 1)
+            // #elif defined (UNITY_REVERSED_Z)
+            //     depth = 1 - depth;       //(1, 0)-->(0, 1)
+            // #endif
 
+                //提高深度的精度
                 return EncodeFloatRGBA(depth);
             }
             ENDCG 

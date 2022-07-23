@@ -49,20 +49,21 @@ Shader "Unlit/ShadowReceiver"
                 o.WorldPos = mul(unity_ObjectToWorld,v.vertex);
 
                 //将当前片元从世界空间变换到光源空间
-                //o.DepthTexcoord = mul(_gWorldToLdirCameraMatrix,o.WorldPos);
+                o.DepthTexcoord = mul(_gWorldToLdirCameraMatrix,o.WorldPos);
                 return o;
             }
 
             float PCFShadow(float depth , float2 uv)
             {
                 float shadow = 0;
+                //3x3的核
                 for (int i = -1; i <=1; ++i)
                 {
                     for (int j = -1; j <= 1; ++j)
                     {
                         half4 Col = tex2D(_gShadowMapTexture,uv+float2(i,j) * _gShadowMapTexture_TexelSize.xy);
                         fixed sampleDepth = DecodeFloatRGBA(Col);
-                        shadow += (sampleDepth+_ShadowBias) < depth ? 1-_ShadowStrange:1;
+                        shadow += (sampleDepth-_ShadowBias) < depth ? 1-_ShadowStrange:1;
                     }
                 }
                 return shadow/=9;
@@ -70,12 +71,12 @@ Shader "Unlit/ShadowReceiver"
             
             fixed4 frag (v2f i) : SV_Target
             {
-
-                float4 ShadowPos = mul(_gWorldToLdirCameraMatrix,i.WorldPos);
-                ShadowPos.xyz = ShadowPos.xyz / ShadowPos.w;
-                float3 Pos = ShadowPos * 0.5 + 0.5;
+                //float4 ShadowPos = mul(_gWorldToLdirCameraMatrix,i.WorldPos);
+                //BUG: 需要把xyz分量都
+                float3 ShadowPos = i.DepthTexcoord.xyz / i.DepthTexcoord.w;
+                float2 Pos = ShadowPos.xy * 0.5 + 0.5; //（-1，1）->(0,1)
                 
-                fixed shadow = PCFShadow(ShadowPos.z,Pos.xy);
+                fixed shadow = PCFShadow(ShadowPos.z,Pos);
                 return shadow;
             }
             ENDCG

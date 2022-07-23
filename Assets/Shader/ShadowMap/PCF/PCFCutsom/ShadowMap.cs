@@ -90,10 +90,12 @@ public class ShadowMap : MonoBehaviour
         Shader.SetGlobalFloat("_ShadowStrange",shadowStrange);
         Shader.SetGlobalFloat("_ShadowBias",shadowBias);
         Shader.SetGlobalFloat("_CutOff",cutOff);
+        
         //GL.GetGPUProjectionMatrix用于处理不同平台投影矩阵的差异
         //设置片段从世界空间变换到光源位置相机的投影空间矩阵
         Matrix4x4 projectMat = GL.GetGPUProjectionMatrix(ldirCamera.projectionMatrix, false);
         Shader.SetGlobalMatrix("_gWorldToLdirCameraMatrix",projectMat * ldirCamera.worldToCameraMatrix);
+        
         //使用深度shader渲染深度图
         ldirCamera.RenderWithShader(depthShader,"");
     }
