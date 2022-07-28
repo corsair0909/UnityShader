@@ -71,13 +71,29 @@ Shader "Unlit/ShadowReceiver"
             
             fixed4 frag (v2f i) : SV_Target
             {
+                fixed3 worldNormal = normalize(i.NDirWS);
+                float3 LightDir = normalize(_WorldSpaceLightPos0.xyz);
+                fixed3 viewDir = normalize(UnityWorldSpaceViewDir(i.WorldPos));
+                
+                fixed3 halfDir = normalize(viewDir+LightDir);
+                fixed NdotL =  saturate(dot(LightDir,worldNormal));
+                fixed NdotH = saturate(dot(halfDir,worldNormal));
+
+                fixed4 var_MainTex = tex2D(_MainTex,i.uv);
+                
+                fixed3 ambient = UNITY_LIGHTMODEL_AMBIENT.xyz * _Tint.rgb;
+                fixed3 diffuse = _LightColor0.xyz * _Tint.rgb * NdotL * var_MainTex.rgb;
+                fixed3 specualr = _LightColor0.xyz * pow(NdotH,_Gloss) * _Spec.rgb;
+
+                fixed3 finalColor = ambient+diffuse+specualr;
+                
                 //float4 ShadowPos = mul(_gWorldToLdirCameraMatrix,i.WorldPos);
                 //BUG: 需要把xyz分量都
                 float3 ShadowPos = i.DepthTexcoord.xyz / i.DepthTexcoord.w;
                 float2 Pos = ShadowPos.xy * 0.5 + 0.5; //（-1，1）->(0,1)
                 
                 fixed shadow = PCFShadow(ShadowPos.z,Pos);
-                return shadow;
+                return fixed4(finalColor*shadow,1);
             }
             ENDCG
         }
