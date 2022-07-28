@@ -20,6 +20,8 @@ public class ShadowMap : MonoBehaviour
 
     [Range(0, 1)] public float shadowBias;
 
+    private RenderTexture shadowMap;
+
     public enum ShadowMapResulotionItem
     {
         Low = 4,
@@ -49,19 +51,21 @@ public class ShadowMap : MonoBehaviour
         ldirCamera.orthographic = true;
         
         ldirCamera.nearClipPlane = 0.3f;
-        ldirCamera.farClipPlane = 200;
+        ldirCamera.farClipPlane = 20;
         ldirCamera.allowMSAA = false;
         ldirCamera.allowHDR = false;
+        
         ldirCamera.cullingMask = 1 << LayerMask.NameToLayer("ShadowCaster");
+        ldirCamera.enabled = false;
         //ldirCamera = lightCam;
     }
     private RenderTexture creatTexture(int resulotion)
     {
         RenderTextureFormat reFormat = RenderTextureFormat.Default;
-        RenderTexture ShadowMap = new RenderTexture(512 * resulotion, 512 * resulotion, 24, reFormat);
-        ShadowMap.hideFlags = HideFlags.DontSave;
-        Shader.SetGlobalTexture("_gShadowMapTexture",ShadowMap);
-        return ShadowMap;
+        shadowMap = new RenderTexture(512 * resulotion, 512 * resulotion, 24, reFormat);
+        shadowMap.hideFlags = HideFlags.DontSave;
+        Shader.SetGlobalTexture("_gShadowMapTexture",shadowMap);
+        return shadowMap;
     }
     
     void Start()
@@ -89,7 +93,7 @@ public class ShadowMap : MonoBehaviour
         }
         Shader.SetGlobalFloat("_ShadowStrange",shadowStrange);
         Shader.SetGlobalFloat("_ShadowBias",shadowBias);
-        Shader.SetGlobalFloat("_CutOff",cutOff);
+        Shader.SetGlobalTexture("_gShadowMapTexture",shadowMap);
         
         //GL.GetGPUProjectionMatrix用于处理不同平台投影矩阵的差异
         //设置片段从世界空间变换到光源位置相机的投影空间矩阵

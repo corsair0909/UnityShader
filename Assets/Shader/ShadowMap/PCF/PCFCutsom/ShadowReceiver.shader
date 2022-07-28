@@ -63,7 +63,7 @@ Shader "Unlit/ShadowReceiver"
                     {
                         half4 Col = tex2D(_gShadowMapTexture,uv+float2(i,j) * _gShadowMapTexture_TexelSize.xy);
                         fixed sampleDepth = DecodeFloatRGBA(Col);
-                        shadow += (sampleDepth-_ShadowBias) < depth ? 1-_ShadowStrange:1;
+                        shadow += (sampleDepth + _ShadowBias) < depth ? 1-_ShadowStrange:1;
                     }
                 }
                 return shadow/=9;
