@@ -227,4 +227,12 @@ Dota2角色中使用非常多的遮罩贴图，此处不一一说明，参考链
 大体想法使用毛笔的笔触和噪音来干扰RampTex的色阶效果
 
 
-## [ShadowMap(PCF)](https://github.com/corsair0909/UnityShader/tree/main/Assets/Shader/ShadowMap/PCF/PCFCutsom). 
+## [ShadowMap(PCF)](https://github.com/corsair0909/UnityShader/tree/main/Assets/Shader/ShadowMap/PCF/PCFCutsom).   
+<img width="799" alt="截屏2022-07-28 12 52 59" src="https://user-images.githubusercontent.com/49482455/181424039-9dbf43a9-04ee-42c7-982d-c4410da668db.png">。      
+### ShadowMap    
+<img width="698" alt="截屏2022-07-28 13 03 05" src="https://user-images.githubusercontent.com/49482455/181424795-14ff4e28-4f4a-48d2-a2d1-b91643aaed0c.png">    
+上图对ShadowMap做出了解释，从光源位置渲染出场景的深度图，称之为ShadowMap，再与片元真正深度进行比较，片元深度大于ShadowMap中深度的位置说明有物体挡住这部分，就认为他在阴影中    
+
+
+### PCF算法核心思想    
+PCF(Percentage-Closer Filtering)是ShadowMap的扩展技术，能够制作边缘相对平滑的阴影（模糊边缘阴影），在ShadowMap的基础上模糊渲染出的shadowMap。
