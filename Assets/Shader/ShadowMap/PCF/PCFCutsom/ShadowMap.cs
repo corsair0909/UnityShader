@@ -56,6 +56,8 @@ public class ShadowMap : MonoBehaviour
         ldirCamera.allowHDR = false;
         
         ldirCamera.cullingMask = 1 << LayerMask.NameToLayer("ShadowCaster");
+        
+        //TODO：玄学Bug2，禁用相机
         ldirCamera.enabled = false;
         //ldirCamera = lightCam;
     }
@@ -93,6 +95,8 @@ public class ShadowMap : MonoBehaviour
         }
         Shader.SetGlobalFloat("_ShadowStrange",shadowStrange);
         Shader.SetGlobalFloat("_ShadowBias",shadowBias);
+        
+        //TODO：玄学Bug1，每帧设置一次shadowmap
         Shader.SetGlobalTexture("_gShadowMapTexture",shadowMap);
         
         //GL.GetGPUProjectionMatrix用于处理不同平台投影矩阵的差异
