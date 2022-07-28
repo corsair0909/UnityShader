@@ -236,3 +236,10 @@ Dota2角色中使用非常多的遮罩贴图，此处不一一说明，参考链
 
 ### PCF算法核心思想    
 PCF(Percentage-Closer Filtering)是ShadowMap的扩展技术，能够制作边缘相对平滑的阴影（模糊边缘阴影），在ShadowMap的基础上模糊渲染出的shadowMap。
+
+
+### 参考链接    
+[Unity实时阴影实现——Shadow Mapping](https://zhuanlan.zhihu.com/p/45653702).     
+[PCF软阴影技术讲解](https://blog.csdn.net/jxw167/article/details/65632580).    
+[实时渲染｜Shadow Map：PCF、PCSS、VSM、MSM](https://zhuanlan.zhihu.com/p/369710758#:~:text=PCF是shadow%20map的扩展技术，用于提供一种人工伪造的软阴影，其主要方式是在计算着色点与shadow,map中该点深度值的比较的时候，不仅采样该像素点的深度值，同时采样周边多个shadow%20map点深度值，逐一比较并求平均值，从而获得了一个从0到1的连续分布，能够表现不同明暗程度的阴影%E3%80%82.)     
+[技术美术知识学习4300：实时阴影](https://blog.csdn.net/qq_36005498/article/details/120441189).   
