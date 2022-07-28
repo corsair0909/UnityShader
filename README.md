@@ -225,3 +225,21 @@ Dota2角色中使用非常多的遮罩贴图，此处不一一说明，参考链
 
 
 大体想法使用毛笔的笔触和噪音来干扰RampTex的色阶效果
+
+
+## [ShadowMap(PCF)](https://github.com/corsair0909/UnityShader/tree/main/Assets/Shader/ShadowMap/PCF/PCFCutsom).   
+<img width="799" alt="截屏2022-07-28 12 52 59" src="https://user-images.githubusercontent.com/49482455/181424039-9dbf43a9-04ee-42c7-982d-c4410da668db.png">。      
+### ShadowMap    
+<img width="698" alt="截屏2022-07-28 13 03 05" src="https://user-images.githubusercontent.com/49482455/181424795-14ff4e28-4f4a-48d2-a2d1-b91643aaed0c.png">    
+上图对ShadowMap做出了解释，从光源位置渲染出场景的深度图，称之为ShadowMap，再与片元真正深度进行比较，片元深度大于ShadowMap中深度的位置说明有物体挡住这部分，就认为他在阴影中    
+
+
+### PCF算法核心思想    
+PCF(Percentage-Closer Filtering)是ShadowMap的扩展技术，能够制作边缘相对平滑的阴影（模糊边缘阴影），在ShadowMap的基础上模糊渲染出的shadowMap。
+
+
+### 参考链接    
+[Unity实时阴影实现——Shadow Mapping](https://zhuanlan.zhihu.com/p/45653702).     
+[PCF软阴影技术讲解](https://blog.csdn.net/jxw167/article/details/65632580).    
+[实时渲染｜Shadow Map：PCF、PCSS、VSM、MSM](https://zhuanlan.zhihu.com/p/369710758#:~:text=PCF是shadow%20map的扩展技术，用于提供一种人工伪造的软阴影，其主要方式是在计算着色点与shadow,map中该点深度值的比较的时候，不仅采样该像素点的深度值，同时采样周边多个shadow%20map点深度值，逐一比较并求平均值，从而获得了一个从0到1的连续分布，能够表现不同明暗程度的阴影%E3%80%82.)     
+[技术美术知识学习4300：实时阴影](https://blog.csdn.net/qq_36005498/article/details/120441189).   
