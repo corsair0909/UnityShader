@@ -24,7 +24,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
-    - _Distance: 0.63
+    - _Distance: 0.77
     m_Colors:
     - _Aspect: {r: 16, g: 9, b: 0, a: 0}
     - _Color0: {r: 0.4167795, g: 1.0883161, b: 2.2655702, a: 1}

@@ -64,7 +64,7 @@ Shader "Unlit/Base"
                 fixed3 diffuse = _LightColor0.xyz * _Tint.rgb * NdotL * var_MainTex.rgb;
                 fixed3 specualr = _LightColor0.xyz * pow(NdotH,_Gloss) * _Spec.rgb;
 
-              
+                
                 return fixed4(ambient+diffuse+specualr,1.0);
             }
             ENDCG

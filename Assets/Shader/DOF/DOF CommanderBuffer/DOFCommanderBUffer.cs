@@ -6,6 +6,7 @@ using UnityEngine.Rendering;
 public class DOFCommanderBUffer : MonoBehaviour
 {
     private CommandBuffer cmd;
+    public Camera cam;
 
     private Renderer _renderTarget;
     // Start is called before the first frame update
@@ -14,9 +15,10 @@ public class DOFCommanderBUffer : MonoBehaviour
         _renderTarget = GetComponent<Renderer>();
         if (_renderTarget)
         {
-            cmd = new CommandBuffer();
+            cmd = new CommandBuffer(){name = "Dof"};
             cmd.DrawRenderer(_renderTarget,_renderTarget.sharedMaterial);
-            Camera.main.AddCommandBuffer(CameraEvent.AfterImageEffects,cmd);
+            //Graphics.ExecuteCommandBuffer(cmd);
+            cam.AddCommandBuffer(CameraEvent.AfterImageEffects,cmd);
             _renderTarget.enabled = false;
         }
     }
@@ -26,7 +28,7 @@ public class DOFCommanderBUffer : MonoBehaviour
         if (_renderTarget)
         {
             //移除事件，清理资源
-            Camera.main.RemoveCommandBuffer(CameraEvent.AfterImageEffects, cmd);
+            cam.RemoveCommandBuffer(CameraEvent.AfterImageEffects, cmd);
             cmd.Clear();
             _renderTarget.enabled = true;
         }

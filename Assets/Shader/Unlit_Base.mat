@@ -27,5 +27,5 @@ Material:
     - _Gloss: 90
     m_Colors:
     - _Spec: {r: 1, g: 0.514151, b: 0.514151, a: 1}
-    - _Tint: {r: 1, g: 1, b: 1, a: 1}
+    - _Tint: {r: 1, g: 0.3160377, b: 0.3628895, a: 1}
   m_BuildTextureStacks: []
