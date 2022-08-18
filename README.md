@@ -285,6 +285,9 @@ PS：新生成的顶点也要进行空间变换，所以在顶点着色器中不
 CommanderBuffer实现  
 <img width="1285" alt="截屏2022-08-18 11 58 41" src="https://user-images.githubusercontent.com/49482455/185302572-0e8e38c4-e126-4489-a387-08cb6aa39cf8.png">  
 深度图实现    
-<img width="1285" alt="截屏2022-08-18 13 31 29" src="https://user-images.githubusercontent.com/49482455/185302581-477d9d48-40ec-43b9-9396-87c4d4722707.png">
-
-
+<img width="1285" alt="截屏2022-08-18 13 31 29" src="https://user-images.githubusercontent.com/49482455/185302581-477d9d48-40ec-43b9-9396-87c4d4722707.png">    
+### 参考链接
+[【Unity Shader编程】之十五 屏幕高斯模糊(Gaussian Blur)后期特效的实现](https://blog.csdn.net/poem_qianmo/article/details/51871531)  
+[Unity Shader-后处理：景深](https://www.cnblogs.com/jrmy/p/14316288.html)  
+[Unity Shader-Command Buffer的使用](https://blog.csdn.net/puppet_master/article/details/72669977)  
+[Depth of Field](https://catlikecoding.com/unity/tutorials/advanced-rendering/depth-of-field/)  
