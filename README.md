@@ -243,3 +243,40 @@ PCF(Percentage-Closer Filtering)是ShadowMap的扩展技术，能够制作边缘
 [PCF软阴影技术讲解](https://blog.csdn.net/jxw167/article/details/65632580).    
 [实时渲染｜Shadow Map：PCF、PCSS、VSM、MSM](https://zhuanlan.zhihu.com/p/369710758#:~:text=PCF是shadow%20map的扩展技术，用于提供一种人工伪造的软阴影，其主要方式是在计算着色点与shadow,map中该点深度值的比较的时候，不仅采样该像素点的深度值，同时采样周边多个shadow%20map点深度值，逐一比较并求平均值，从而获得了一个从0到1的连续分布，能够表现不同明暗程度的阴影%E3%80%82.)     
 [技术美术知识学习4300：实时阴影](https://blog.csdn.net/qq_36005498/article/details/120441189).   
+
+
+## [草地(几何+曲面细分着色器)](https://github.com/corsair0909/UnityShader/tree/main/Assets/Shader/GeometryShader)
+![lQLPJxaUH4czMRzNAmDNA6SwJhyz0tCd7JgC88BT7ABuAA_932_608 png_720x720g](https://user-images.githubusercontent.com/49482455/184465405-a854cc72-42c3-4ea9-b2f7-71781f483cc7.jpg)
+
+### 实现
+1、几何着色器和曲面细分着色器的联合使用：VertexShader->（传递数据）->TessellationShader->(传细分后的数据)->GeometryShader->（传递新产生的顶点）->framentShader
+#### 曲面细分着色器  
+细分控制着色器hullShader：起到专递数据的作用，通过5个特性配置数据      
+细分计算着色器DomainShader：计算由hullShader传入的细分顶点的位置（也可以进行空间变换），特性决定输入类型。  
+由于三角形顶点无法使用xy坐标定位，需要三角形中的重心坐标对每个顶点数据进行重新定位，曲面细分后每一组细分都会有自己的重心坐标SV_DomainLocation    
+#### 几何着色器    
+将图元作为输入，生成新的顶点输出，将顶点附加到输出流来一次输出一个顶点，流的拓扑由固定的选择来确定（TriangleStream、LineStream、PointStream）作为GS输出阶段的流选择
+新
+将图元作为输入，生成新的顶点输出，将顶点附加到输出流来一次输出一个顶点，流的拓扑由固定的选择来确定（TriangleStream、LineStream、PointStream）作为GS输出阶段的流选
+PS：新生成的顶点也要进行空间变换，所以在顶点着色器中不进行变换，而是延迟到新的顶点计算完成后。  
+一次Append函数会想流提交一个顶点，顶点会根据流的拓扑选择组成新的形状。    
+#### 草地生成     
+以片元上的任意一顶点（包括中心点）为基准，在左右两侧和法线方向上的点生成新的顶点组成三角形。
+为了确保草地可以在任意平面上正常生成（也即草的生长方向在任意平面上垂直片元），将使用切线空间，一般规定向上方向为Y轴，但切线空间向上方向为第三个分量Z轴，在设置草的高度时将高度参数设置到Z分量上.   
+<img width="560" alt="截屏2022-08-13 11 28 14" src="https://user-images.githubusercontent.com/49482455/184466755-9c6a1c85-8233-475c-be71-e149c7ce9561.png">    
+#### 剩下的细节    
+风：FlowMap贴图采样出的随机向量，得出绕风向量旋转的矩阵添加到变换矩阵中（此处变换矩阵指位置变换）   
+弯曲度：绕水平方向轴求出变换矩阵，添加参数控制弯曲度    
+朝向：绕树枝方向轴求出变换矩阵（切线空间的第三个分量）    
+三个矩阵对新生成的顶点进行变换得到不同朝向的草    
+曲率：宏定义 BLADE_SEGMENTS*2+1 中定义了层数Segment和所需要的顶点数量，根据层数计算每一层草的高度和宽度。
+
+
+### 参考链接
+[Roystan](https://roystan.net/articles/grass-shader.html)    
+[细分着色器(Tessellation Shader)在Unity顶点着色器中的写法以及各参数变量解释](https://blog.csdn.net/liu_if_else/article/details/75039895)    
+[Unity Shader:曲面细分着色器](https://zhuanlan.zhihu.com/p/342308199)    
+[LearnOpenGL-几何着色器](https://learnopengl-cn.readthedocs.io/zh/latest/04%20Advanced%20OpenGL/09%20Geometry%20Shader/)
+[Shader特效—— 爆炸，沙化](https://blog.csdn.net/xdedzl/article/details/89644365)    
+[Geometry Shader学习笔记](https://blog.csdn.net/qq_37925032/article/details/82936769)    
+[三维绕任意轴旋转矩阵](https://blog.csdn.net/qq_44800780/article/details/102895109)
