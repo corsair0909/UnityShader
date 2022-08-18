@@ -280,3 +280,11 @@ PS：新生成的顶点也要进行空间变换，所以在顶点着色器中不
 [Shader特效—— 爆炸，沙化](https://blog.csdn.net/xdedzl/article/details/89644365)    
 [Geometry Shader学习笔记](https://blog.csdn.net/qq_37925032/article/details/82936769)    
 [三维绕任意轴旋转矩阵](https://blog.csdn.net/qq_44800780/article/details/102895109)
+
+## [景深（Depth Of Field)](https://github.com/corsair0909/UnityShader/tree/main/Assets/Shader/DOF)    
+CommanderBuffer实现  
+<img width="1285" alt="截屏2022-08-18 11 58 41" src="https://user-images.githubusercontent.com/49482455/185302572-0e8e38c4-e126-4489-a387-08cb6aa39cf8.png">  
+深度图实现    
+<img width="1285" alt="截屏2022-08-18 13 31 29" src="https://user-images.githubusercontent.com/49482455/185302581-477d9d48-40ec-43b9-9396-87c4d4722707.png">
+
+
