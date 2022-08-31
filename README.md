@@ -182,7 +182,16 @@ SDF面部阴影贴图中有光照的部分只有一侧，当光照方向转动�
 侧方向和灯光方向的夹角的正负决定使用那一侧的光照方向。   
 isShadow：step函数将光照计算结果限制在一侧的阴影中    
 Bias：光照结果和阴影结果的差做smoothness平滑过渡。   
-阴影和非阴影部分的过渡使用，根据bias的结果在有光照和无光照的面部颜色之间插值过渡
+阴影和非阴影部分的过渡使用，根据bias的结果在有光照和无光照的面部颜色之间插值过渡    
+##### 5、头发各向异性    
+Kajiya-Kay模型：利用切线（tangent）方向来计算高光强度。模型切线方向和头发方向垂直（个人理解），所以实际上需要的是副切线的方向来替代模型默认切线方向，在计算之前需要将切线方向修改为默认切线和法线的差积（副切线方向）。     
+下图为kajiya-kay模型对高光的计算方法，  
+<img width="270" alt="截屏2022-08-31 11 58 34" src="https://user-images.githubusercontent.com/49482455/187589585-b3ce112b-bdcb-4760-9c9a-4c55511339fb.png">  
+为了模拟主高光和副高光的两层高光，对切线（副切线）方向添加扰动后再计算整体高光效果。案例中使用noise进行扰动
+<img width="150" alt="截屏2022-08-31 11 59 28" src="https://user-images.githubusercontent.com/49482455/187589664-c718e52f-689d-4905-98c5-51e0f53161e3.png">
+
+
+<img width="1281" alt="截屏2022-08-31 11 33 27" src="https://user-images.githubusercontent.com/49482455/187588524-e0e85131-5c49-457f-97c9-a6e4ad0f42da.png">    
 
 ### 参考链接。    
 [从零开始的卡通渲染](https://zhuanlan.zhihu.com/p/109101851).     
@@ -192,6 +201,8 @@ Bias：光照结果和阴影结果的差做smoothness平滑过渡。
 [原神角色渲染Shader分析还原](https://zhuanlan.zhihu.com/p/360229590).       
 [神作面部阴影渲染还原](https://zhuanlan.zhihu.com/p/279334552).      
 [二次元角色卡通渲染—面部篇](https://zhuanlan.zhihu.com/p/411188212).    
+[日式卡通渲染的效果的unity实现](https://blog.csdn.net/sdqq1234/article/details/61437045)    
+[各向异性头发效果](https://www.jianshu.com/p/7dc980ea4c51)
 
 ## [FlowMap水面](https://github.com/corsair0909/UnityShader/tree/main/Assets/Shader/FlowMap).    
 ![QQ20220716-152941-HD](https://user-images.githubusercontent.com/49482455/179894389-1a087dae-677a-4bf0-917f-6002c8bf238f.gif)
