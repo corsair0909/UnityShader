@@ -44,13 +44,13 @@ public class PlugTangentTools
             averageNormals[j] = averageNormalHash[mesh.vertices[j]];
         }
 
-        var tangents = new Vector4[mesh.vertexCount];
+        var tangents = new Color[mesh.vertexCount];
         for (var j = 0; j < mesh.vertexCount; j++)
         {
             tangents[j] = new Vector4(averageNormals[j].x, averageNormals[j].y, averageNormals[j].z, 0);
         }
-        mesh.tangents = tangents;
-        
+        //mesh.tangents = tangents;
+        mesh.colors = tangents;
         Debug.Log("done");
     }
 }
