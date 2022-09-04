@@ -41,7 +41,8 @@ Clip函数剔除小于阈值的像素.
 
 
 ## [自定义PBR](https://github.com/corsair0909/-0-Shader/tree/main/Assets/PBR)    
-<img width="1164" alt="截屏2022-06-28 20 47 26" src="https://user-images.githubusercontent.com/49482455/176182188-7def2ee4-7744-42dc-90dd-e442f212bd99.png">    
+<img width="1282" alt="截屏2022-09-04 14 12 45" src="https://user-images.githubusercontent.com/49482455/188300053-b077c19c-8b8a-4123-ae9c-6de5bcace1cb.png">    
+
 ### PBR光照           
 PBR光照模型需要满足如下三个条件
 
