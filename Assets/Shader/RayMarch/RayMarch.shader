@@ -72,7 +72,8 @@ Shader "Unlit/RayMarch"
                 return dO;
             }
             //获取法线
-            //
+            //偏导数构成的向量称为梯度，隐函数可以看做一条等高线，梯度与等高线的切线垂直，求的隐函数上某一点的法线
+            //https://blog.csdn.net/qq_40765537/article/details/105926647（直观理解偏导数、方向导数和法向量和梯度）
             float3 GetNormal(float3 p)
             {
                 float2 vec = float2(0.01,0);
