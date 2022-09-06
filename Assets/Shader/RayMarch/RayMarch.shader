@@ -101,6 +101,7 @@ Shader "Unlit/RayMarch"
                 {
                     float3 p = ro+rd * d;
                     col.rgb = GetLight(p);
+                   
                 }
                 else
                 {
